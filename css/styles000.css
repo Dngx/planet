@@ -1,0 +1,68 @@
+.ikonat {
+    top: 27%;
+    right: 4%;
+    transform: translateY(-50%);
+    position: fixed;
+    z-index: 100;
+}
+
+.ikonat ul {
+    padding: initial;
+}
+
+.ikonat ul li{
+    height: 40px;
+    width: 40px;
+    list-style-type: none;
+    padding-left: 12px;
+    padding-top: 6px;
+    margin-top: 5px;
+}
+
+/* Responsivenes for contact icons 'ikonat' */
+
+@media (max-width: 991px)
+{
+.ikonat {
+    top: 27%;
+    right: 5%;
+    transform: translateY(-50%);
+    position: fixed;
+    z-index: 100;
+}
+
+.ikonat ul {
+    padding: initial;
+}
+
+.ikonat ul li{
+    height: 40px;
+    width: 40px;
+    list-style-type: none;
+    padding-left: 12px;
+    padding-top: 6px;
+    margin-top: 5px;
+}}
+
+@media (max-width: 600px)
+{
+.ikonat {
+    top: 28%;
+    right: 6.5%;
+    transform: translateY(-50%);
+    position: fixed;
+    z-index: 100;
+}
+
+.ikonat ul {
+    padding: initial;
+}
+
+.ikonat ul li{
+    height: 40px;
+    width: 40px;
+    list-style-type: none;
+    padding-left: 12px;
+    padding-top: 6px;
+    margin-top: 5px;
+}}
