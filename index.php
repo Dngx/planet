@@ -101,14 +101,19 @@
                   
                 <?php 
                     // SQL QUERY
-                    $sql3 = "SELECT * FROM tbl_porosia";
+                    $sql3 = "SELECT SUM(amount) AS Totali FROM payments";
+                    
                     // execute query
                     $res3 = mysqli_query($cxn, $sql3);
-                    // count rows
-                    $count3 = mysqli_num_rows($res3);
+                    
+                    //get the value
+                    $row3 = mysqli_fetch_assoc($res3);
+
+                    // get the total revenue
+                    $totali_gjeneruar = $row3['Totali'];
                   ?>
 
-                  <h1><?php echo $count3; ?></h1>
+                  <h1><?php echo $totali_gjeneruar; ?> &euro;</h1>
                   Income
                 </div>
                 <div class="col text-center text-light border" style="background-color:#90A4AE;">
@@ -116,7 +121,7 @@
                 <?php 
                     // SQL QUERY  TO GET TOTAL REVENUE
                     // agregate function in SQL
-                    $sql4 = "SELECT SUM(shuma) AS Totali FROM tbl_porosia WHERE statusi = 'Porositur'";
+                    $sql4 = "SELECT SUM(amount) AS Totali FROM expenses";
 
                     // execute the query
                     $res4 = mysqli_query($cxn, $sql4);

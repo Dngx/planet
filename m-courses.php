@@ -29,8 +29,18 @@
         <div class="row text-start p-4 mb-auto" style="width:90%; margin: auto;">
             <div class="container ">
                
-                <br><br>
-                <p><h1 class="p-1 text-start" style="color: #3f51b5;">Manage courses</h1></p><hr>
+                <br><br><br>
+                <div class="row mb-auto" style="margin: auto;">
+                <div class="col-md-8" style="padding: 0;">
+                <h1 class="p-1 text-start" style="color: #3f51b5;">Manage courses</h1>
+                </div>
+                <div class="col-md-4" style="padding: 0;">
+                <div class="text-end">
+                  <a href="add-course.php" class="btn btn-primary btn-sm"><img src="img/icon-add.svg" height="30" width="30"> Add course</a>
+                </div>
+                </div>
+                </div>
+                <hr>
                 <?php 
                   if(isset($_SESSION['add']))
                   {
@@ -75,8 +85,9 @@
                   }
                 ?>
                 <!-- butoni per shtimin e adminit -->
-                    <div class="text-start"><a href="add-course.php" class="btn btn-primary btn-sm"><img src="img/icon-add.svg" height="30" width="30"> Add course</a></div>
+                    
                     <br>
+                <div class="table-responsive">
                 <table class="table">
   <thead>
     <tr>
@@ -147,6 +158,7 @@
 
   
 </table>
+</div>
             </div>
         </div>
         <!-- Permbajtja end -->

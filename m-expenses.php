@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"> -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-icons.css" rel="stylesheet">
-
   <!-- css code to clearfix -->
   <style>
             body {
@@ -19,7 +18,7 @@
             }
         </style>
 
-    <title>Planet English * Manage students</title>
+    <title>Planet English * Manage expenses</title>
   </head>
   <body>
     
@@ -33,11 +32,11 @@
                 <br><br><br>
                 <div class="row mb-auto" style="margin: auto;">
                 <div class="col-md-8" style="padding: 0;">
-                <h1 class="p-1 text-start" style="color: #3f51b5;">Manage students</h1>
+                <h1 class="p-1 text-start" style="color: #3f51b5;">Manage expenses</h1>
                 </div>
                 <div class="col-md-4" style="padding: 0;">
                 <div class="text-end">
-                <a href="add-student.php" class="btn btn-primary btn-sm"><img src="img/icon-add-white.png" height="30" width="30"> Add student</a>
+                  <a href="add-expense.php" class="btn btn-primary btn-sm"><img src="img/icon-add.svg" height="30" width="30"> Add expense</a>
                 </div>
                 </div>
                 </div>
@@ -88,23 +87,21 @@
                 <!-- butoni per shtimin e adminit -->
                     
                     <br>
-                <div class="table-responsive">
+                <div class="table-responsive"> 
                 <table class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">First name</th>
-      <th scope="col">Last name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Phone</th>
-      <th scope="col">Address</th>
+      <th scope="col">Description</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Expense date</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
 
   <?php
     // query to get all admin
-    $sql = "SELECT * FROM students";
+    $sql = "SELECT * FROM expenses ORDER BY expense_date DESC";
 
     // execute the query
     $res = mysqli_query($cxn, $sql);
@@ -126,27 +123,23 @@
           // and while loop will run as long as we have data in databse
 
           //get individual data
-          $student_id = $rows['student_id'];
-          $fname = $rows['first_name'];
-          $lname = $rows['last_name'];
-          $email = $rows['email'];
-          $phone = $rows['phone'];
-          $address = $rows['address'];
+          $expense_id = $rows['expense_id'];
+          $expense = $rows['expense_description'];
+          $amount = $rows['amount'];
+          $exp_d = $rows['expense_date'];
 
           // display the values in our table
           ?>
         
           <tr>
             <th scope="row"><?php echo $sn++?></th>
-            <td><?php echo $fname;?></td>
-            <td><?php echo $lname;?></td>
-            <td><?php echo $email;?></td>
-            <td><?php echo $phone;?></td>
-            <td><?php echo $address;?></td>
+            <td><?php echo $expense;?></td>
+            <td><?php echo $amount;?></td>
+            <td><?php echo $exp_d;?></td>
             <td>
               <!-- Use this line if needed for data update: <a href="<?php //echo SITEURL; ?>admin/perditeso-psw.php?course$course_id=<?php //echo $course_id; ?>"><img src="../img/icon-chpsw.png" alt="Perditeso fjalekalimin"></a> -->
-              <a href="<?php echo SITEURL; ?>u-student.php?student_id=<?php echo $student_id; ?>"><img src="img/icon-update.png" alt="Update student"></a>
-              <a href="<?php echo SITEURL; ?>d-student.php?student_id=<?php echo $student_id; ?>"><img src="img/icon-delete.png" alt="Delete student"></a>
+              <a href="<?php echo SITEURL; ?>u-expense.php?expense_id=<?php echo $expense_id; ?>"><img src="img/icon-update.png" alt="Update course"></a>
+              <a href="<?php echo SITEURL; ?>d-expense.php?expense_id=<?php echo $expense_id; ?>"><img src="img/icon-delete.png" alt="Delete course"></a>
             </td>
           </tr>
         

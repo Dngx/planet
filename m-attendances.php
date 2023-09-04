@@ -29,29 +29,28 @@
 
         <!-- Permbajtja start -->
         <div class="row text-start p-4 mb-auto" style="width:90%; margin: auto;">
-            <div class="container ">
+            <div class="container">
                
                 <br><br><br>
                 <div class="row mb-auto" style="margin: auto;">
-                <div class="col-md-8">
+                <div class="col-md-8" style="padding: 0;">
                   <h1 class="text-start" style="color: #3f51b5;">Manage attendances</h1>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" style="padding: 0;">
                 <div class="text-end"><a href="r-attendances.php" class="btn btn-primary btn-sm"><img src="img/icon-records.svg" height="30" width="30"> Attendance records</a></div>
                 </div>
                 </div>
                 <hr>
 
                 
-                <div class="mb-2">
-                  <form action="" method="POST" class="form-inline">
-                  <div class="form-row align-items-center">
-                    <div class="col-sm-3">
-                            <label for="course" class="form-label">Filter records by course name:</label>
-                            </div>
+                <div class="row mb-auto" style="margin: auto;">
+                  <form action="" method="POST" class="form-inline" style="padding-left: 0;">
                   
-                            <div class="col-auto">
-                            <select class="form-select w-25" aria-label="Default select example" name="course">
+                    <div class="col-8 text-start d-inline">
+                            <label for="course" class="form-label">Filter records by course name:</label>
+                            &nbsp; 
+                  
+                            <select class="form-select w-25 d-inline" aria-label="Default select example" name="course">
                             
                                 <?php
                                     // create php code to display categories from database
@@ -91,18 +90,25 @@
                                 ?>    
                             </select>
                             </div>
-                            <div class="col-auto">
-                            <button type="submit" class="btn btn-primary btn-sm mb-2" name="filter">Filter</button>
+                            <div class="col-4 d-inline">&nbsp;
+                            <button type="submit" class="btn btn-primary" name="filter">Filter</button>
                             </div>
                             </form>
                         </div>
                 
 
                 <?php 
+                
                   if(isset($_SESSION['add']))
                   {
                       echo $_SESSION['add']; // displaying session message
                       unset($_SESSION['add']); // removing session message
+                  }
+
+                  if(isset($_SESSION['error']))
+                  {
+                      echo $_SESSION['error']; // displaying session message
+                      unset($_SESSION['error']); // removing session message
                   }
 
                   if(isset($_SESSION['delete']))
@@ -140,10 +146,11 @@
                     echo $_SESSION['fjalekalimi-nuk-nderrohet']; // displaying session message
                     unset($_SESSION['fjalekalimi-nuk-nderrohet']); // removing session message
                   }
+                  
                 ?>
                 <!-- butoni per shtimin e adminit -->
                     
-                    
+                <div class="table-responsive">
                 <table class="table">
   <thead>
     <tr>
@@ -152,7 +159,7 @@
       <th scope="col">Course</th>
       <th scope="col">Attendance date</th>
       <th scope="col">Status</th>
-      <th scope="col">Actions</th>
+      
     </tr>
   </thead>
 
@@ -172,7 +179,7 @@
     if(isset($_POST['filter'])){
       //echo "filter button clicked.";
       $course_n = $_POST['course'];
-      echo "Selected course name: " .$course_n. "<br>";
+      echo "<div class='success'>Selected course name: " .$course_n. "</div><br>";
 
       $sql = "
           SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, a.attendance_id, a.attenrollment_id  FROM students s 
@@ -186,7 +193,7 @@
           GROUP BY s.first_name
     ";
     } else{
-      echo "You didn't select any course group! <br>";
+      echo "<div class='error'>You didn't select any course group!</div> <br>";
     $sql = "
           SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, a.attendance_id, a.attenrollment_id  FROM students s 
           LEFT JOIN enrollments e
@@ -300,9 +307,9 @@
   ?>
 
 </table>
+</div>
 
-
-  <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-sm justify-content-center"></input>
+  <input type="submit" name="submit" value="Submit" class="btn btn-success justify-content-center"></input>
 </form>
 
 <?php 
@@ -345,6 +352,8 @@
     
     // test code from AI
     for ($i = 0; $i < count($attenrollment_ids); $i++) {
+      // Check if student ID and attendance date are not empty
+      if(!empty($attenrollment_ids[$i]) && !empty($attendance_dates[$i]) && !empty($statuses[$i])){
         $data = array(
             'attenrollment_id' => $attenrollment_ids[$i],
             'attendance_date' => $attendance_dates[$i],
@@ -357,11 +366,17 @@
         $query = "INSERT INTO attendances ($columns) VALUES ($values)";
 
         if (mysqli_query($cxn, $query)) {
-            echo "<br>Attendance marked successfully!";
+            $_SESSION['add'] = "<div class='success'>Attendance marked successfully!</div>";
+            //echo "<br>Attendance marked successfully!";
         } else {
-            echo "<br><br>Error marking attendance: " . mysqli_error($cxn);
+            //echo "<br><br>Error marking attendance: " . mysqli_error($cxn);
+            $_SESSION['error'] = "<div class='error'>Error marking attendance: </div>" . mysqli_error($cxn);
         }
-        
+      }
+      else {
+        //echo "<br><br>Error marking attendance: " . mysqli_error($cxn);
+        $_SESSION['error'] = "<div class='error'>Error marking attendance: </div>" . mysqli_error($cxn);
+          }
     }
 
     // legacy code

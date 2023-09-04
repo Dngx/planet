@@ -20,7 +20,7 @@
             }
   </style>
 
-    <title>Planet English * Grading</title>
+    <title>Planet English * Payments</title>
   </head>
   <body>
     
@@ -29,26 +29,27 @@
 
         <!-- Permbajtja start -->
         <div class="row text-start p-4 mb-auto" style="width:90%; margin: auto;">
-            <div class="container">
+            <div class="container ">
                
                 <br><br><br>
                 <div class="row mb-auto" style="margin: auto;">
                 <div class="col-md-8" style="padding: 0;">
-                  <h1 class="text-start" style="color: #3f51b5;">Manage grades</h1>
+                  <h1 class="text-start" style="color: #3f51b5;">Manage payments / incomes</h1>
                 </div>
                 <div class="col-md-4" style="padding: 0;">
-                <div class="text-end"><a href="r-grades.php" class="btn btn-primary btn-sm"><img src="img/icon-records.svg" height="30" width="30"> Grading records</a></div>
+                <div class="text-end"><a href="r-payments.php" class="btn btn-primary btn-sm"><img src="img/icon-records.svg" height="30" width="30"> Payment records</a></div>
                 </div>
                 </div>
                 <hr>
 
                 
-                <div class="row mb-auto" style="margin: auto;">
+                <div class="mb-2">
                   <form action="" method="POST" class="form-inline" style="padding-left: 0;">
                   
                     <div class="col-8 text-start d-inline">
-                            <label for="course" class="form-label">Filter records by course name: </label>
-                            &nbsp;                   
+                            <label for="course" class="form-label">Filter records by course name:</label>
+                            &nbsp;
+                  
                             
                             <select class="form-select w-25 d-inline" aria-label="Default select example" name="course">
                             
@@ -103,13 +104,7 @@
                       echo $_SESSION['add']; // displaying session message
                       unset($_SESSION['add']); // removing session message
                   }
-                  
-                  if(isset($_SESSION['error']))
-                  {
-                      echo $_SESSION['error']; // displaying session message
-                      unset($_SESSION['error']); // removing session message
-                  }
-                  
+
                   if(isset($_SESSION['delete']))
                   {
                     echo $_SESSION['delete']; // displaying session message
@@ -148,14 +143,14 @@
                 ?>
                 <!-- butoni per shtimin e adminit -->
                     
-                <div class="table-responsive">   
+                <div class="table-responsive">
                 <table class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Student</th>
-      <th scope="col">Grade</th>
-      <th scope="col">Description</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Payment date</th>
     </tr>
   </thead>
 
@@ -178,26 +173,26 @@
       echo "<div class='success'>Selected course name: " .$course_n. "</div><br>";
 
       $sql = "
-          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, g.grade_id, g.grenrollment_id  FROM students s 
+          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, p.payment_id, p.payenrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
           ON e.encourse_id = c.course_id
-          LEFT JOIN grades g
-          ON e.enrollment_id = g.grenrollment_id
+          LEFT JOIN payments p
+          ON e.enrollment_id = p.payenrollment_id
           WHERE c.course_name = '".$course_n."'
           GROUP BY s.first_name
     ";
     } else{
       echo "<div class='error'>You didn't select any course group!</div> <br>";
     $sql = "
-          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, g.grade_id, g.grenrollment_id  FROM students s 
+          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, p.payment_id, p.payenrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
           ON e.encourse_id = c.course_id
-          LEFT JOIN grades g
-          ON e.enrollment_id = g.grenrollment_id
+          LEFT JOIN payments p
+          ON e.enrollment_id = p.payenrollment_id
           GROUP BY s.first_name
     ";
   }
@@ -222,14 +217,14 @@
           // and while loop will run as long as we have data in databse
           
           //get individual data
-          $grade_id = $rows['grade_id'];
-          $grenrollment_id = $rows['grenrollment_id'];
+          $payment_id = $rows['payment_id'];
+          $payenrollment_id = $rows['payenrollment_id'];
           $enrollment_id = $rows['enrollment_id'];
           $firstname = $rows['first_name'];
           $lastname = $rows['last_name'];
           $cname = $rows['course_name'];
-          $grade = isset($rows['grade']);
-          $grade_description = isset($rows['grade_description']);
+          $amount = isset($rows['amount']);
+          $payment_date = isset($rows['payment_date']);
           
 
           // display the values in our table
@@ -237,20 +232,19 @@
         
           <tr>
             <th scope="row"><?php echo $sn++?></th>
-            <td class="w-25">
+            <td class="w-50">
             
             <!-- Getting input values from form -->
             <form action="" method="POST" enctype="multipart/form-data">
               <?php echo $firstname.' '.$lastname;?>
-              <input type="hidden" name="grenrollment_id[]" value="<?php echo $enrollment_id; ?>">
+              <input type="hidden" name="payenrollment_id[]" value="<?php echo $enrollment_id; ?>">
             </td>
-            <td>
-              <input type="number" step=".01" class="form-control" name="grade[]" value="">
+            <td class="w-25">
+              <input type="number" step=".01" class="form-control" name="amount[]" value="">
             </td>
-            <td class="w-50">
-            <textarea name="grade_description[]" id="" cols="70" rows="1" class="form-control"></textarea>
+            <td class="w-25">
+            <input type="date" name="payment_date[]" class="form-control"></input>
             </td>
-            
             
             
           </tr>
@@ -269,7 +263,6 @@
 
 </table>
 </div>
-
 
   <input type="submit" name="submit" value="Submit" class="btn btn-success justify-content-center"></input>
 </form>
@@ -308,36 +301,29 @@
         // //     status = '$status'
         // // ";
       
-    $grenrollment_ids = $_POST['grenrollment_id'];
-    $grades = $_POST['grade'];
-    $grade_descriptions = $_POST['grade_description'];
+    $payenrollment_ids = $_POST['payenrollment_id'];
+    $amounts = $_POST['amount'];
+    $payment_dates = $_POST['payment_date'];
     
     // test code from AI
-    for ($i = 0; $i < count($grenrollment_ids); $i++) {
-      // Check if student ID and attendance date are not empty
-      if(!empty($grenrollment_ids[$i]) && !empty($grades[$i]) && !empty($grade_descriptions[$i])){
+    for ($i = 0; $i < count($payenrollment_ids); $i++) {
         $data = array(
-            'grenrollment_id' => $grenrollment_ids[$i],
-            'grade' => $grades[$i],
-            'grade_description' => $grade_descriptions[$i]
+            'payenrollment_id' => $payenrollment_ids[$i],
+            'amount' => $amounts[$i],
+            'payment_date' => $payment_dates[$i]
         );
         
         $columns = implode(', ', array_keys($data));
         $values = "'" . implode("', '", $data) . "'";
         
-        $query = "INSERT INTO grades ($columns) VALUES ($values)";
+        $query = "INSERT INTO payments ($columns) VALUES ($values)";
 
         if (mysqli_query($cxn, $query)) {
-          $_SESSION['add'] = "<div class='success'>Grading marked successfully!</div>";  
-          //echo "<br>Grading marked successfully!";
+            echo "<br>Payment data inserted successfully!";
         } else {
-          $_SESSION['error'] = "<div class='error'>Error marking grades: </div>" . mysqli_error($cxn);  
-          //echo "<br><br>Error marking grades: " . mysqli_error($cxn);
+            echo "<br><br>Error assigning payments: " . mysqli_error($cxn);
         }
-      }
-      else {
-        $_SESSION['error'] = "<div class='error'>Error marking grades: </div>" . mysqli_error($cxn);  
-      }
+        
     }
 
     // legacy code
