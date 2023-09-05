@@ -19,6 +19,7 @@
 <hr>
 
 <div class="row mb-auto" style="margin: auto;">
+            <div class="col-10" style="padding-left: 0;">
                   <form action="" method="POST" class="form-inline" style="padding-left: 0;">
                   
                     <div class="col-8 text-start d-inline" style="padding-left: 0;">
@@ -81,10 +82,25 @@
                             <div class="col-4 d-inline">&nbsp;
                             <a href="r-grades.php" class="btn btn-outline-primary" name="show">Show all</a>
                             </div>
-                            <div class="col-4 d-inline">&nbsp;
-                            <a href="#" class="btn btn-outline-success" name="pdf">Generate PDF</a>
-                            </div>
                             </form>
+                            </div>
+                            <div class="col-2" style="padding-right: 0;">
+                            <!-- ketu eshte vendi per te vendosur divin e butonit Generate PDF-->
+                            <div class="d-inline" style="padding-right: 0;">
+                                <form action="grades-report.php" method="POST" class="form-inline text-end">
+                                <input type="hidden" 
+                                    value="<?php 
+                                    if(isset($_POST['student']))
+                                        {
+                                        echo $_POST['student']; 
+                                        }
+                                        else {}
+                                    ?>" 
+                                    name="student_name" class="text-end">
+                                <button type="submit" class="btn btn-outline-success" name="pdf">Generate PDF</button>
+                                </form>
+                            </div>
+                            </div>
                         </div>
 
 
@@ -135,7 +151,7 @@
         -- GROUP BY s.first_name
         ";
     } else{
-        echo "<div class='error'>You didn't select any student!</div> <br>";
+        echo "<div class='error'>Showing all the existing students in database. You didn't select any student!</div> <br>";
 
     //use following code for else case - to show all the existing data in the grades table
     $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description FROM students s 
@@ -190,7 +206,12 @@
 
 </table>
 
-
+<!-- <div class="col-4 d-inline">
+    <form action="grades-report.php" method="POST" class="form-inline" style="padding-left: 0;">
+    <input type="hidden" value="<?php //echo $student_n; ?>">
+    <button type="submit" class="btn btn-outline-success" name="pdf">Generate PDF</button>
+    </form>
+</div> -->
     
 </div>
 
