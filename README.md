@@ -4,7 +4,7 @@ Planet English - Student / Course management app
 Another project to support teachers on their daily duty to help them manage student - course information.
 
 Basic functionalities of the project include:
-1. Registering students
+1. Registering students & courses
 2. Keep track of attendance, grading, payments, expenses
 3. Generating printable PDF reports for student grading
 4. Mobile, Tablet device responsiveness
