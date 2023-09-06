@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <?php include('partials/menu.php'); ?>
 
 
@@ -109,12 +110,6 @@
                   {
                     echo $_SESSION['delete']; // displaying session message
                     unset($_SESSION['delete']); // removing session message
-                  }
-
-                  if(isset($_SESSION['update']))
-                  {
-                    echo $_SESSION['update']; // displaying session message
-                    unset($_SESSION['update']); // removing session message
                   }
 
                   if(isset($_SESSION['perdorues-jo']))
@@ -307,6 +302,7 @@
     
     // test code from AI
     for ($i = 0; $i < count($payenrollment_ids); $i++) {
+      if(!empty($payenrollment_ids[$i]) && !empty($amounts[$i]) && !empty($payment_dates[$i])){
         $data = array(
             'payenrollment_id' => $payenrollment_ids[$i],
             'amount' => $amounts[$i],
@@ -319,11 +315,16 @@
         $query = "INSERT INTO payments ($columns) VALUES ($values)";
 
         if (mysqli_query($cxn, $query)) {
-            echo "<br>Payment data inserted successfully!";
+          $_SESSION['add'] = "<div class='success'><br>Payment data inserted successfully!</div>";  
+          header("Location:" .SITEURL. 'r-payments.php');
         } else {
-            echo "<br><br>Error assigning payments: " . mysqli_error($cxn);
+            $_SESSION['error'] = "<br><div class='error'>Error assigning payments: </div>" . mysqli_error($cxn);
+            header("Location:" .SITEURL. 'm-payments.php');
         }
-        
+      }
+      else {
+        $_SESSION['error'] = "<div class='error'>Error assigning payments: </div>" . mysqli_error($cxn);  
+      }
     }
 
     // legacy code
@@ -424,3 +425,5 @@
   
   </body>
 </html>
+
+<?php ob_end_flush(); ?>

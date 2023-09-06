@@ -17,7 +17,6 @@
         <div class="text-end"><a href="m-payments.php" class="btn btn-secondary btn-sm"><img src="img/icon-back.svg" height="30" width="30"></a></div>
     </div>       
 <hr>
-</div>
 
 <?php
     if(isset($_SESSION['add'])) // checking whether the session is set or not
@@ -25,7 +24,16 @@
         echo $_SESSION['add']; // displaying  the session message if set
         unset($_SESSION['add']); // remove session message
     } 
+    if(isset($_SESSION['delete'])) 
+    {
+        echo $_SESSION['delete']; 
+        unset($_SESSION['delete']); 
+    } 
 ?>
+
+</div>
+
+
 
 <div class="container" style="width:83%; margin: auto;">
 
@@ -82,6 +90,7 @@
             </td>
             <td>
             <a href="<?php echo SITEURL; ?>u-payment.php?payment_id=<?php echo $pay_id; ?>"><img src="img/icon-update.png" alt="Update Payment"></a>
+            <a href="<?php echo SITEURL; ?>d-payment.php?payment_id=<?php echo $pay_id; ?>"><img src="img/icon-delete.png" alt="Delete Payment"></a>
             </td>
     </tr>
     <?php

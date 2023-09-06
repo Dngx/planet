@@ -5,8 +5,10 @@ require('partials/fpdf.php');
 // Create a class that extends FPDF
 class PDF extends FPDF {
     function Header() {
+        $this->Image('logo.png',10,6,30);
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(190, 10, 'Grading Report', 0, 1, 'C');
+        $this->Ln(15);
     }
 
     function Footer() {
@@ -37,7 +39,7 @@ $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, 
     WHERE CONCAT(s.first_name, ' ' , s.last_name) = '".$stud_name."'
     -- GROUP BY s.first_name
     ";
-} else{
+} else {
     //echo "<div class='error'>You didn't select any student!</div> <br>";
 
 //use following code for else case - to show all the existing data in the grades table

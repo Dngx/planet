@@ -87,7 +87,7 @@
                             <div class="col-2" style="padding-right: 0;">
                             <!-- ketu eshte vendi per te vendosur divin e butonit Generate PDF-->
                             <div class="d-inline" style="padding-right: 0;">
-                                <form action="grades-report.php" method="POST" class="form-inline text-end">
+                                <form action="grades-report.php" method="POST" class="form-inline text-end" target="_blank">
                                 <input type="hidden" 
                                     value="<?php 
                                     if(isset($_POST['student']))
@@ -115,6 +115,12 @@
     {
         echo $_SESSION['error']; // displaying session message
         unset($_SESSION['error']); // removing session message
+    }
+
+    if(isset($_SESSION['delete']))
+    {
+        echo $_SESSION['delete']; // displaying session message
+        unset($_SESSION['delete']); // removing session message
     }
 ?>
 </div>
@@ -193,7 +199,8 @@
                 <?php echo $gr_desc; ?>
             </td>
             <td>
-            <a href="<?php echo SITEURL; ?>u-grade.php?grade_id=<?php echo $gr_id; ?>"><img src="img/icon-update.png" alt="Update course"></a>
+            <a href="<?php echo SITEURL; ?>u-grade.php?grade_id=<?php echo $gr_id; ?>"><img src="img/icon-update.png" alt="Update grade"></a>
+            <a href="<?php echo SITEURL; ?>d-grade.php?grade_id=<?php echo $gr_id; ?>"><img src="img/icon-delete.png" alt="Delete grade"></a>
             </td>
     </tr>
     <?php

@@ -1,4 +1,7 @@
-<?php include('partials/menu.php'); ?>
+<?php 
+ob_start();
+include('partials/menu.php'); 
+?>
 
 
 <html lang="en">
@@ -367,7 +370,9 @@
 
         if (mysqli_query($cxn, $query)) {
             $_SESSION['add'] = "<div class='success'>Attendance marked successfully!</div>";
-            //echo "<br>Attendance marked successfully!";
+            // redirect to manage admin page
+            header("Location: " .SITEURL. 'r-attendances.php');
+            
         } else {
             //echo "<br><br>Error marking attendance: " . mysqli_error($cxn);
             $_SESSION['error'] = "<div class='error'>Error marking attendance: </div>" . mysqli_error($cxn);
@@ -375,7 +380,7 @@
       }
       else {
         //echo "<br><br>Error marking attendance: " . mysqli_error($cxn);
-        $_SESSION['error'] = "<div class='error'>Error marking attendance: </div>" . mysqli_error($cxn);
+        //$_SESSION['error'] = "<div class='error'>Error marking attendance: </div>" . mysqli_error($cxn);
           }
     }
 
@@ -477,3 +482,7 @@
   
   </body>
 </html>
+
+<?php  
+ob_end_flush();  
+?>

@@ -46,11 +46,17 @@
                     <form action="" method="POST">
                         <div class="mb-2">
                             <label for="grade" class="form-label">Grade:</label>
-                            <input type="text" class="form-control" name="grade" value="<?php echo $grade;?>">
+                            <input type="text" class="form-control" name="grade" value="<?php 
+                            if(isset($row['grade'])){
+                            echo $grade;}
+                            else{}?>">
                         </div>
                         <div class="mb-2">
                             <label for="gr_desc" class="form-label">Description:</label>
-                            <input type="text" class="form-control" name="gr_desc" value="<?php echo $gr_desc; ?>">
+                            <input type="text" class="form-control" name="gr_desc" value="<?php 
+                            if(isset($row['grade_description'])){
+                                echo $gr_desc;}
+                                else{}?>">
                         </div>
                         <br>
                         <input type="hidden" name="grade_id" value="<?php echo $grade_id; ?>">
