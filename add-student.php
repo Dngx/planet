@@ -44,6 +44,10 @@
                         <div class="mb-2">
                             <label for="address" class="form-label">Address:</label>
                             <input type="text" class="form-control" name="address" placeholder="Living address...">
+                        </div>
+                        <div class="mb-2">
+                            <label for="parent" class="form-label">Parent:</label>
+                            <input type="text" class="form-control" name="parent" placeholder="Parent's full name...">
                         </div><br>
                         <input type="submit" name="submit" value="Register" class="btn btn-primary">
                     </form>
@@ -72,6 +76,7 @@
         $email = $_POST['email'];
         $phone = $_POST['phone'];
         $address = $_POST['address'];
+        $parent = $_POST['parent'];
         //$fjalekalimi = md5($_POST['fjalekalimi']); // Password encryption with md5 ! cannot be decrypted.
             // use the above code line to include passwords!
 
@@ -82,7 +87,8 @@
             last_name  = '$lname',
             email = '$email',
             phone = '$phone',
-            address = '$address'
+            address = '$address',
+            parent = '$parent'
         ";
 
         // 3. Executing query and saving data into database

@@ -98,6 +98,7 @@
       <th scope="col">Email</th>
       <th scope="col">Phone</th>
       <th scope="col">Address</th>
+      <th scope="col">Parent</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -132,6 +133,7 @@
           $email = $rows['email'];
           $phone = $rows['phone'];
           $address = $rows['address'];
+          $parent = $rows['parent'];
 
           // display the values in our table
           ?>
@@ -143,6 +145,7 @@
             <td><?php echo $email;?></td>
             <td><?php echo $phone;?></td>
             <td><?php echo $address;?></td>
+            <td><?php echo $parent;?></td>
             <td>
               <!-- Use this line if needed for data update: <a href="<?php //echo SITEURL; ?>admin/perditeso-psw.php?course$course_id=<?php //echo $course_id; ?>"><img src="../img/icon-chpsw.png" alt="Perditeso fjalekalimin"></a> -->
               <a href="<?php echo SITEURL; ?>u-student.php?student_id=<?php echo $student_id; ?>"><img src="img/icon-update.png" alt="Update student"></a>

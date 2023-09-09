@@ -9,7 +9,7 @@
         </style>
 <br><br>
 <!-- Pjesa kryesore SHto admin / start -->
-<div class="row text-start p-5 mb-auto" style="width:90%; margin: auto;">
+<div class="row text-start mb-auto" style="width:90%; margin: auto; padding: 3rem; padding-bottom: unset;">
     <div class="col-md-8">
         <h1 class="p-1 text-start" style="color: #3f51b5;">Student - Attendance Records</h1>
     </div>
@@ -18,6 +18,73 @@
     </div>       
 <hr>
 
+<div class="row mb-auto" style="margin: auto;">
+<div class="col-12 text-start" style="padding-left: 0;">
+                  <form action="" method="POST" class="form-inline" style="padding-left: 0;">
+                  
+                    <div class="col-8 text-start d-inline" style="padding-left: 0;">
+                            <label for="student" class="form-label" style="padding-left: 0;">Filter records by student name: </label>
+                            &nbsp;                   
+                            
+                            <select class="form-select w-25 d-inline" aria-label="Default select example" name="student">
+                            
+                                <?php
+                                    // create php code to display categories from database
+                                    // 1. create sql to get all active categories from database
+                                    $sql = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description FROM students s 
+                                            LEFT JOIN enrollments e
+                                            ON s.student_id = e.enstudent_id
+                                            LEFT JOIN courses c
+                                            ON e.encourse_id = c.course_id
+                                            LEFT JOIN grades g
+                                            ON e.enrollment_id = g.grenrollment_id
+                                            GROUP BY s.first_name
+                                            ";
+
+                                    // executing the query
+                                    $res = mysqli_query($cxn, $sql);
+                                    
+                                    //count rows to check whether we have categories or not
+                                    $count = mysqli_num_rows($res);
+
+                                    // if count is greater than zero, we have categories else we do not have categories
+                                    if($count>0)
+                                    {
+                                        // we have categories
+                                        while($row = mysqli_fetch_assoc($res))
+                                        {
+                                            //get the details of categories
+                                            $gr_id = $row['grade_id'];
+                                            $fname = $row['first_name'];
+                                            $lname = $row['last_name'];
+                                            $student = $fname .' '.$lname;
+                                            
+                                            ?>
+                                            <option value="<?php echo $student; ?>"><?php echo $student; ?></option>
+                                            <?php
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // we do not have categories
+                                        ?>
+                                        <option value="0">There are no students available</option>
+                                        <?php
+                                    }
+
+                                    // 2. display on dropdown
+                                ?>    
+                            </select>
+                            </div>
+                            <div class="col-4 d-inline">&nbsp;
+                            <button type="submit" class="btn btn-primary" name="filter">Filter</button>
+                            </div>
+                            <div class="col-4 d-inline">&nbsp;
+                            <a href="r-attendances.php" class="btn btn-outline-primary" name="show">Show all</a>
+                            </div>
+                            </form>
+                            </div>
+</div>
 
 <?php
     if(isset($_SESSION['add'])) // checking whether the session is set or not
@@ -47,8 +114,26 @@
   </thead>
 
 <?php
+    if(isset($_POST['filter'])){
+        //echo "filter button clicked.";
+        $student_n = $_POST['student'];
+        echo "<div class='success'>Selected student name: " .$student_n. "</div><br>";
     
-    // include('db_connection.php');
+        //use following code to filter data by the selected student
+    $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, a.attendance_id, a.attenrollment_id, a.attendance_date, a.status  FROM students s 
+    LEFT JOIN enrollments e
+    ON s.student_id = e.enstudent_id
+    LEFT JOIN courses c
+    ON e.encourse_id = c.course_id
+    LEFT JOIN attendances a
+    ON e.enrollment_id = a.attenrollment_id
+    WHERE CONCAT(s.first_name, ' ' , s.last_name) = '".$student_n."'
+    -- GROUP BY s.first_name
+    ";
+    } else{
+        echo "<div class='error'>Showing all the existing students in database. You didn't select any student!</div> <br>";
+
+    //use following code for else case - to show all the existing data in the grades table
     $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, a.attendance_id, a.attenrollment_id, a.attendance_date, a.status  FROM students s 
     LEFT JOIN enrollments e
     ON s.student_id = e.enstudent_id
@@ -58,6 +143,7 @@
     ON e.enrollment_id = a.attenrollment_id
     ORDER BY a.attendance_date DESC
     ";
+    }
 
     $result = mysqli_query($cxn, $query);
 
