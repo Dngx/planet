@@ -37,6 +37,7 @@
                                 $email = $row['email'];
                                 $phone = $row['phone']; 
                                 $address = $row['address'];
+                                $parent = $row['parent'];
                             }
                             else{
                                 // redirect to manage admin page
@@ -66,6 +67,10 @@
                             <label for="address" class="form-label">Address:</label>
                             <input type="text" class="form-control" name="address" value="<?php echo $address;?>">
                         </div>
+                        <div class="mb-2">
+                            <label for="parent" class="form-label">Parent:</label>
+                            <input type="text" class="form-control" name="parent" value="<?php echo $parent;?>">
+                        </div>
                         <br>
                         <input type="hidden" name="student_id" value="<?php echo $student_id; ?>">
                         <input type="submit" name="submit" value="Update" class="btn btn-primary">
@@ -85,6 +90,7 @@
         $email = $_POST['email'];
         $phone = $_POST['phone'];
         $address = $_POST['address'];
+        $parent = $_POST['parent'];
 
         // create a SQL query to update admin
         $sql = "UPDATE students SET
@@ -92,7 +98,8 @@
         last_name = '$lname',
         email = '$email',
         phone = '$phone',
-        address = '$address'
+        address = '$address',
+        parent = '$parent'
 
         WHERE student_id = '$student_id'
         ";
