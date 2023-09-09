@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 23, 2023 at 07:06 AM
+-- Generation Time: Sep 09, 2023 at 03:53 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -45,7 +45,24 @@ INSERT INTO `attendances` (`attendance_id`, `attenrollment_id`, `attendance_date
 (36, 8, '2023-08-24', 'Absent'),
 (37, 2, '2023-08-24', 'Present'),
 (38, 4, '2023-08-27', 'Absent'),
-(39, 4, '2023-08-27', 'Tardy');
+(39, 4, '2023-08-27', 'Tardy'),
+(40, 10, '2023-09-04', 'Present'),
+(41, 8, '2023-09-05', 'Present'),
+(42, 2, '2023-09-04', 'Tardy'),
+(43, 9, '2023-09-03', 'Tardy'),
+(44, 10, '2023-09-03', 'Absent'),
+(45, 11, '2023-09-06', 'Tardy'),
+(46, 10, '2023-09-06', 'Absent'),
+(47, 10, '2023-09-06', 'Absent'),
+(48, 9, '2023-09-06', 'Present'),
+(49, 9, '2023-09-07', 'Present'),
+(50, 11, '2023-09-07', 'Present'),
+(51, 4, '2023-09-07', 'Tardy'),
+(52, 4, '2023-09-08', 'Present'),
+(53, 4, '2023-09-08', 'Present'),
+(54, 4, '2023-09-09', 'Present'),
+(55, 9, '2023-09-10', 'Present'),
+(56, 10, '2023-09-10', 'Absent');
 
 -- --------------------------------------------------------
 
@@ -67,7 +84,9 @@ CREATE TABLE `courses` (
 
 INSERT INTO `courses` (`course_id`, `course_name`, `start_date`, `end_date`, `instructor`) VALUES
 (4, 'English - Group 1', '2023-07-31', '2023-08-06', 'Erlinda S. Edreneli'),
-(5, 'English - Group 2', '2023-07-22', '2023-08-06', 'Erlinda S. Edreneli');
+(5, 'English - Group 2', '2023-07-22', '2023-08-06', 'Erlinda S. Edreneli'),
+(6, 'Maths 1', '2023-09-04', '2023-10-04', 'D.Edreneli'),
+(7, 'Elementary 1', '2022-09-01', '0000-00-00', 'Erlinda S. Edreneli');
 
 -- --------------------------------------------------------
 
@@ -90,7 +109,9 @@ INSERT INTO `enrollments` (`enrollment_id`, `enstudent_id`, `encourse_id`, `enro
 (2, 2, 5, '2023-08-11'),
 (4, 3, 4, '2023-08-06'),
 (8, 4, 5, '0000-00-00'),
-(9, 5, 5, '2023-08-21');
+(9, 5, 5, '2023-08-21'),
+(10, 6, 6, '2023-09-04'),
+(11, 7, 7, '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -101,9 +122,18 @@ INSERT INTO `enrollments` (`enrollment_id`, `enstudent_id`, `encourse_id`, `enro
 CREATE TABLE `expenses` (
   `expense_id` int(11) NOT NULL,
   `expense_description` varchar(200) DEFAULT NULL,
-  `amount` decimal(4,2) DEFAULT NULL,
+  `amount` decimal(5,2) DEFAULT NULL,
   `expense_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `expenses`
+--
+
+INSERT INTO `expenses` (`expense_id`, `expense_description`, `amount`, `expense_date`) VALUES
+(2, 'Fatura e rrymes', '17.45', '2023-08-25'),
+(3, 'Fatura e ujit', '8.00', '2023-08-26'),
+(4, 'Fatura e rrymes', '25.00', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -114,9 +144,21 @@ CREATE TABLE `expenses` (
 CREATE TABLE `grades` (
   `grade_id` int(11) NOT NULL,
   `grenrollment_id` int(11) DEFAULT NULL,
-  `grade` decimal(3,2) DEFAULT NULL,
+  `grade` decimal(4,2) DEFAULT NULL,
   `grade_description` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `grades`
+--
+
+INSERT INTO `grades` (`grade_id`, `grenrollment_id`, `grade`, `grade_description`) VALUES
+(15, 4, '19.99', 'updated score'),
+(26, 4, '87.42', 'student grade update because of a technical mistake'),
+(27, 9, '97.00', 'test grade'),
+(28, 10, '41.90', 'tesssstttt'),
+(29, 10, '45.55', 'aha'),
+(30, 4, '22.20', 'ok');
 
 -- --------------------------------------------------------
 
@@ -127,9 +169,17 @@ CREATE TABLE `grades` (
 CREATE TABLE `payments` (
   `payment_id` int(11) NOT NULL,
   `payenrollment_id` int(11) DEFAULT NULL,
-  `amount` decimal(2,2) DEFAULT NULL,
+  `amount` decimal(4,2) DEFAULT NULL,
   `payment_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`payment_id`, `payenrollment_id`, `amount`, `payment_date`) VALUES
+(100, 9, '75.00', '2023-09-06'),
+(103, 2, '24.00', '2023-09-06');
 
 -- --------------------------------------------------------
 
@@ -143,18 +193,22 @@ CREATE TABLE `students` (
   `last_name` varchar(50) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
-  `address` varchar(200) DEFAULT NULL
+  `address` varchar(200) DEFAULT NULL,
+  `parent` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `email`, `phone`, `address`) VALUES
-(2, 'Filan', 'Fisteku', 'filani@fisteku.com', '44123456', 'Prizren'),
-(3, 'John', 'Doe', 'j.doe@gmail.com', '041996556', 'Arbane, Prizren'),
-(4, 'Armando', 'Maradona', 'armando@gmail.com', '045987456', 'Zhur, Prizren'),
-(5, 'Albert', 'Einstein', 'albert@stein.de', '49116458', 'Lubizhde');
+INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `email`, `phone`, `address`, `parent`) VALUES
+(2, 'Filan', 'Fisteku', 'filani@fisteku.com', '44123456', 'Prizren', NULL),
+(3, 'John', 'Doe', 'j.doe@gmail.com', '041996556', 'Arbane, Prizren', NULL),
+(4, 'Armando', 'Maradona', 'armando@gmail.com', '045987456', 'Zhur, Prizren', NULL),
+(5, 'Albert', 'Einstein', 'albert@stein.de', '49116458', 'Lubizhde', NULL),
+(6, 'Shero', 'Liebe', 'shero@liebe.de', '045678945', 'Dojchland', NULL),
+(7, 'Arall ', 'Hoxhallar', '', '', '', NULL),
+(10, 'Filan', 'Fisteku', 'filani@fisteku.com', '44123456', 'Prizren', 'Shero Fisteku');
 
 --
 -- Indexes for dumped tables
@@ -215,43 +269,43 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `attendances`
 --
 ALTER TABLE `attendances`
-  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `enrollments`
 --
 ALTER TABLE `enrollments`
-  MODIFY `enrollment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `enrollment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `expense_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `expense_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `grade_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `grade_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
