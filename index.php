@@ -37,111 +37,19 @@
                     Ketu vendoset permbajtja per kategorite
                 </div>-->
                 <br><br>
-                <p><h1 class="p-1 text-start" style="color: #3f51b5;">Paneli</h1></p>
+                <p><h1 class="p-1 text-start" style="color: #3f51b5;">Welcome!</h1></p>
                 <hr>
-                <?php 
-                                if(isset($_SESSION['login']))
-                                {
-                                    echo $_SESSION['login'];
-                                    unset ($_SESSION['login']);
-                                }
-                ?><br>
                 
-              <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">  
-                <div class="col text-center text-light border" style="background-color:#90A4AE;">
+                <video width="900" height="600" autoplay muted loop>
+                  <source src="img/pe_logo.mp4" type="video/mp4">
+                </video>
+              
                   
-                  <?php 
-                    // SQL QUERY
-                    $sql = "SELECT * FROM courses";
-                    // execute query
-                    $res = mysqli_query($cxn, $sql);
-                    // count rows
-                    $count = mysqli_num_rows($res);
-                  ?>
                   
-                  <h1><?php echo $count; ?></h1>
-                  <?php 
-                  if ($count == 1){
-                    echo "Course";
-                  }
-                  elseif($count < 1){
-                    echo "There is no course registered yet!";
-                  }
-                  else{
-                    echo "Courses";
-                  }
-                  ?>
-                  <!-- Course -->
-                </div>
-                <div class="col text-center text-light border" style="background-color:#90A4AE;">
-                  
-                <?php 
-                    // SQL QUERY
-                    $sql2 = "SELECT * FROM students";
-                    // execute query
-                    $res2 = mysqli_query($cxn, $sql2);
-                    // count rows
-                    $count2 = mysqli_num_rows($res2);
-                  ?>
-                  
-                  <h1><?php echo $count2; ?></h1>
-                  <?php 
-                  if ($count2 == 1){
-                    echo "Student";
-                  }
-                  elseif($count2 < 1){
-                    echo "There are no students registered yet!";
-                  }
-                  else{
-                    echo "Students";
-                  }
-                  ?>
-                </div>
-                <div class="col text-center text-light border" style="background-color:#90A4AE;">
-                  
-                <?php 
-                    // SQL QUERY
-                    $sql3 = "SELECT SUM(amount) AS Totali FROM payments";
-                    
-                    // execute query
-                    $res3 = mysqli_query($cxn, $sql3);
-                    
-                    //get the value
-                    $row3 = mysqli_fetch_assoc($res3);
-
-                    // get the total revenue
-                    $totali_gjeneruar = $row3['Totali'];
-                  ?>
-
-                  <h1><?php echo $totali_gjeneruar; ?> &euro;</h1>
-                  Income
-                </div>
-                <div class="col text-center text-light border" style="background-color:#90A4AE;">
-                  
-                <?php 
-                    // SQL QUERY  TO GET TOTAL REVENUE
-                    // agregate function in SQL
-                    $sql4 = "SELECT SUM(amount) AS Totali FROM expenses";
-
-                    // execute the query
-                    $res4 = mysqli_query($cxn, $sql4);
-
-                    //get the value
-                    $row4 = mysqli_fetch_assoc($res4);
-
-                    // get the total revenue
-                    $totali_gjeneruar = $row4['Totali'];
-                  ?>
-                  
-                  <h1><?php echo $totali_gjeneruar; ?> &euro;</h1>
-                  Expenses
-                </div>
-              </div>  
             </div>
-        </div>
         <!-- Permbajtja end -->
 
-        
+        </div>
 
         
                  
