@@ -22,8 +22,10 @@
 <div class="row">
             <nav class="navbar fixed-top navbar-expand-lg navbar-dark py-3" style="background-color: #3f51b5;">
                 <div class="container-fluid">
-                  <a class="navbar-brand" href="index.php">
+                  <a class="navbar-brand" href="summary.php">
                     <img src="img/icon-planet.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                    </a>
+                  <a class="navbar-brand" href="index.php">
                     <strong>PLANET ENGLISH</strong>
                   </a>
 
@@ -54,7 +56,7 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="m-grading.php">
+                        <a class="nav-link" href="m-grades.php">
                         <img src="img/icon-grading.svg" title="Grading" height="30" width="30">
                         </a>
                       </li>

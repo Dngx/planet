@@ -12,7 +12,7 @@
 
 <!-- Footer start -->
 
-<div class="row fixed-bottom text-center p-2 mt-auto" style="padding: 2%; width:90%; margin: auto;">
+<div class="row sticky-bottom text-center p-2 mt-auto" style="padding: 2%; width:90%; margin: auto;">
             <div class="container-fluid">
                 <hr>
                 <div class="row">
