@@ -176,7 +176,7 @@
           LEFT JOIN payments p
           ON e.enrollment_id = p.payenrollment_id
           WHERE c.course_name = '".$course_n."'
-          GROUP BY s.first_name
+          GROUP BY CONCAT(s.first_name, s.last_name)
     ";
     } else{
       echo "<div class='error'>You didn't select any course group!</div> <br>";
@@ -188,7 +188,7 @@
           ON e.encourse_id = c.course_id
           LEFT JOIN payments p
           ON e.enrollment_id = p.payenrollment_id
-          GROUP BY s.first_name
+          GROUP BY CONCAT(s.first_name, s.last_name)
     ";
   }
 

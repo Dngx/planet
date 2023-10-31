@@ -38,7 +38,7 @@
                                             ON e.encourse_id = c.course_id
                                             LEFT JOIN grades g
                                             ON e.enrollment_id = g.grenrollment_id
-                                            GROUP BY s.first_name
+                                            GROUP BY CONCAT(s.first_name, s.last_name)
                                             ";
 
                                     // executing the query

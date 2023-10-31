@@ -193,7 +193,7 @@ include('partials/menu.php');
           LEFT JOIN attendances a
           ON e.enrollment_id = a.attenrollment_id
           WHERE c.course_name = '".$course_n."'
-          GROUP BY s.first_name
+          GROUP BY CONCAT(s.first_name, s.last_name)
     ";
     } else{
       echo "<div class='error'>You didn't select any course group!</div> <br>";
@@ -205,7 +205,7 @@ include('partials/menu.php');
           ON e.encourse_id = c.course_id
           LEFT JOIN attendances a
           ON e.enrollment_id = a.attenrollment_id
-          GROUP BY s.first_name
+          GROUP BY CONCAT(s.first_name, s.last_name)
     ";
   }
 
