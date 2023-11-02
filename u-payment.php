@@ -45,7 +45,7 @@
 
                     <form action="" method="POST">
                         <div class="mb-2">
-                            <label for="amount" class="form-label">Grade:</label>
+                            <label for="amount" class="form-label">Amount:</label>
                             <input type="number" class="form-control" name="amount" value="<?php echo $amount;?>">
                         </div>
                         <div class="mb-2">

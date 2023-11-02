@@ -34,6 +34,7 @@
 
                                 $grade = $row['grade'];
                                 $gr_desc = $row['grade_description'];
+                                $gr_date = $row['grade_date'];
                                 
                             }
                             else{
@@ -58,6 +59,13 @@
                                 echo $gr_desc;}
                                 else{}?>">
                         </div>
+                        <div class="mb-2">
+                            <label for="gr_date" class="form-label">Grading date:</label>
+                            <input type="date" class="form-control" name="gr_date" value="<?php 
+                            if(isset($row['grade_date'])){
+                                echo $gr_date;}
+                                else{}?>">
+                        </div>
                         <br>
                         <input type="hidden" name="grade_id" value="<?php echo $grade_id; ?>">
                         <input type="submit" name="submit" value="Update" class="btn btn-primary">
@@ -74,11 +82,13 @@
         $grade_id = $_POST['grade_id'];
         $grade = $_POST['grade'];
         $gr_desc = $_POST['gr_desc'];
+        $gr_date = $_POST['gr_date'];
        
         // create a SQL query to update admin
         $sql = "UPDATE grades SET
         grade = '$grade',
-        grade_description = '$gr_desc'
+        grade_description = '$gr_desc',
+        grade_date = '$gr_date'
         
         WHERE grade_id = '$grade_id'
         ";

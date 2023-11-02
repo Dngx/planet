@@ -22,16 +22,13 @@
             <div class="col-10" style="padding-left: 0;">
                   <form action="" method="POST" class="form-inline" style="padding-left: 0;">
                   
-                    <div class="col-8 text-start d-inline" style="padding-left: 0;">
-                            <label for="student" class="form-label" style="padding-left: 0;">Filter records by student name: </label>
-                            &nbsp;                   
-                            
+                    <div class="col-8 text-start d-inline" style="padding-left: 0;">                
                             <select class="form-select w-25 d-inline" aria-label="Default select example" name="student">
                             
                                 <?php
                                     // create php code to display categories from database
                                     // 1. create sql to get all active categories from database
-                                    $sql = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description FROM students s 
+                                    $sql = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description, g.grade_date FROM students s 
                                             LEFT JOIN enrollments e
                                             ON s.student_id = e.enstudent_id
                                             LEFT JOIN courses c
@@ -83,24 +80,76 @@
                             <a href="r-grades.php" class="btn btn-outline-primary" name="show">Show all</a>
                             </div>
                             </form>
+
+                            <!-- Second filter to show monthly data -->
+                            <form action="" method="POST" class="form-inline" style="padding-left: 0;">
+                            
+                            <div class="col-8 text-start d-inline" style="padding-left: 0;">
+                                    <!-- <label for="period" class="form-label" style="padding-left: 0;">Filter records by payment period: </label>
+                                    &nbsp;                    -->
+                          
+                                        <select class="form-select w-25 d-inline" aria-label="Default select example" name="period">
+                                            <option value="" default>-- Select month --</option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>     
+                                        </select>
+                                        </div>
+                                        <div class="col-4 d-inline">&nbsp;
+                                        <button type="submit" class="btn btn-primary" name="filter2">Filter</button>
+                                        </div>
+                                        <div class="col-4 d-inline">&nbsp;
+                                        <a href="r-grades.php" class="btn btn-outline-primary" name="show">Show all</a>
+                                        </div>
+                            </form>
+
                             </div>
+
+
+
                             <div class="col-2" style="padding-right: 0;">
                             <!-- ketu eshte vendi per te vendosur divin e butonit Generate PDF-->
                             <div class="d-inline" style="padding-right: 0;">
                                 <form action="grades-report.php" method="POST" class="form-inline text-end" target="_blank">
                                 <input type="hidden" 
                                     value="<?php 
-                                    if(isset($_POST['student']))
+                                    if(isset($_POST['student'])) 
                                         {
                                         echo $_POST['student']; 
                                         }
-                                        else {}
+                                        else {
+                                        }
                                     ?>" 
                                     name="student_name" class="text-end">
                                 <button type="submit" class="btn btn-outline-success" name="pdf">Generate PDF</button>
                                 </form>
                             </div>
+                            <div class="d-inline" style="padding-right: 0;">
+                                <form action="grades-report.php" method="POST" class="form-inline text-end" target="_blank">
+                                <input type="hidden" 
+                                    value="<?php 
+                                    if(isset($_POST['period'])) 
+                                        {
+                                        echo $_POST['period']; 
+                                        }
+                                        else {
+                                        }
+                                    ?>" 
+                                    name="period" class="text-end">
+                                <button type="submit" class="btn btn-outline-success" name="pdf2">Generate PDF</button>
+                                </form>
                             </div>
+                            </div>
+                            
                         </div>
 
 
@@ -134,6 +183,7 @@
       <th scope="col">Student</th>
       <th scope="col">Grade</th>
       <th scope="col">Description</th>
+      <th scope="col">Grading date</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -146,7 +196,7 @@
 
     // include('db_connection.php');
     //use following code to filter data by the selected student
-    $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description FROM students s 
+    $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description, g.grade_date FROM students s 
         LEFT JOIN enrollments e
         ON s.student_id = e.enstudent_id
         LEFT JOIN courses c
@@ -156,11 +206,36 @@
         WHERE CONCAT(s.first_name, ' ' , s.last_name) = '".$student_n."'
         -- GROUP BY s.first_name
         ";
-    } else{
+    } 
+    // second conditional to filter data by period/month
+    elseif(isset($_POST['filter2'])){
+        //echo "filter2 button clicked.";
+
+        $period_m = $_POST['period'];
+            if($period_m < 1) {
+                echo "<div class='error'>You didn't select any period!</div>";
+            }else {
+
+        echo "<div class='success'>Selected month: " .$period_m. "</div><br>";
+    
+        //use following code to filter data by the selected period
+        $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description, g.grade_date FROM students s 
+        LEFT JOIN enrollments e
+        ON s.student_id = e.enstudent_id
+        LEFT JOIN courses c
+        ON e.encourse_id = c.course_id
+        LEFT JOIN grades g
+        ON e.enrollment_id = g.grenrollment_id
+        WHERE MONTH(g.grade_date) = '".$period_m."'
+        -- GROUP BY g.grade_date
+        ";    
+        }
+        }
+        else{
         echo "<div class='error'>Showing all the existing students in database. You didn't select any student!</div> <br>";
 
     //use following code for else case - to show all the existing data in the grades table
-    $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description FROM students s 
+    $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description, g.grade_date FROM students s 
     LEFT JOIN enrollments e
     ON s.student_id = e.enstudent_id
     LEFT JOIN courses c
@@ -183,6 +258,7 @@
         $gren_id = $row['grenrollment_id'];
         $grade = $row['grade'];
         $gr_desc = $row['grade_description'];
+        $gr_date = $row['grade_date'];
         //echo $row['attendance_id'] . " | " . $row['attenrollment_id'] . " | " . $row['attendance_date'] . " | " . $row['status'] . "<br>";
     
     ?>
@@ -197,6 +273,9 @@
             </td>
             <td>
                 <?php echo $gr_desc; ?>
+            </td>
+            <td>
+                <?php echo $gr_date; ?>
             </td>
             <td>
             <a href="<?php echo SITEURL; ?>u-grade.php?grade_id=<?php echo $gr_id; ?>"><img src="img/icon-update.png" alt="Update grade"></a>

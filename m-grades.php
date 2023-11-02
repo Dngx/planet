@@ -156,6 +156,7 @@
       <th scope="col">Student</th>
       <th scope="col">Grade</th>
       <th scope="col">Description</th>
+      <th scope="col">Grading date</th>
     </tr>
   </thead>
 
@@ -230,7 +231,7 @@
           $cname = $rows['course_name'];
           $grade = isset($rows['grade']);
           $grade_description = isset($rows['grade_description']);
-          
+          $grade_date = isset($rows['grade_date']);
 
           // display the values in our table
           ?>
@@ -247,10 +248,12 @@
             <td>
               <input type="number" step=".01" class="form-control" name="grade[]" value="">
             </td>
-            <td class="w-50">
+            <td class="w-25">
             <textarea name="grade_description[]" id="" cols="70" rows="1" class="form-control"></textarea>
             </td>
-            
+            <td class="w-25">
+            <input type="date" name="grade_date[]" class="form-control"></input>
+            </td>
             
             
           </tr>
@@ -311,15 +314,17 @@
     $grenrollment_ids = $_POST['grenrollment_id'];
     $grades = $_POST['grade'];
     $grade_descriptions = $_POST['grade_description'];
+    $grade_dates = $_POST['grade_date'];
     
     // test code from AI
     for ($i = 0; $i < count($grenrollment_ids); $i++) {
       // Check if student ID and attendance date are not empty
-      if(!empty($grenrollment_ids[$i]) && !empty($grades[$i]) && !empty($grade_descriptions[$i])){
+      if(!empty($grenrollment_ids[$i]) && !empty($grades[$i]) && !empty($grade_descriptions[$i]) && !empty($grade_dates[$i])){
         $data = array(
             'grenrollment_id' => $grenrollment_ids[$i],
             'grade' => $grades[$i],
-            'grade_description' => $grade_descriptions[$i]
+            'grade_description' => $grade_descriptions[$i],
+            'grade_date' => $grade_dates[$i]
         );
         
         $columns = implode(', ', array_keys($data));
