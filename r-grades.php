@@ -1,5 +1,6 @@
 <?php ob_start(); ?>
-<?php include('partials/menu.php'); ?>
+<?php include('partials/menu.php'); 
+error_reporting('E_ALL & ~E_NOTICE'); ?>
 
 <!-- css code to clearfix -->
 <style>
@@ -19,11 +20,11 @@
 <hr>
 
 <div class="row mb-auto" style="margin: auto;">
-            <div class="col-10" style="padding-left: 0;">
-                  <form action="" method="POST" class="form-inline" style="padding-left: 0;">
+            <div class="col-5" style="padding-left: 0;">
+                  <form action="" method="POST" class="form-inline" style="padding-left: 0; padding-right:0;">
                   
                     <div class="col-8 text-start d-inline" style="padding-left: 0;">                
-                            <select class="form-select w-25 d-inline" aria-label="Default select example" name="student">
+                            <select class="form-select w-50 d-inline" aria-label="Default select example" name="student">
                             
                                 <?php
                                     // create php code to display categories from database
@@ -88,7 +89,7 @@
                                     <!-- <label for="period" class="form-label" style="padding-left: 0;">Filter records by payment period: </label>
                                     &nbsp;                    -->
                           
-                                        <select class="form-select w-25 d-inline" aria-label="Default select example" name="period">
+                                        <select class="form-select w-50 d-inline" aria-label="Default select example" name="period">
                                             <option value="" default>-- Select month --</option>
                                             <option value="1">January</option>
                                             <option value="2">February</option>
@@ -108,18 +109,18 @@
                                         <button type="submit" class="btn btn-primary" name="filter2">Filter</button>
                                         </div>
                                         <div class="col-4 d-inline">&nbsp;
-                                        <a href="r-grades.php" class="btn btn-outline-primary" name="show">Show all</a>
+                                        <a href="r-grades.php" class="btn btn-outline-primary" name="show2">Show all</a>
                                         </div>
                             </form>
 
-                            </div>
+            </div>
 
 
 
-                            <div class="col-2" style="padding-right: 0;">
+                            <div class="col-2" style="padding-left: 0; padding-right: 0; margin-top: 5px;">
                             <!-- ketu eshte vendi per te vendosur divin e butonit Generate PDF-->
-                            <div class="d-inline" style="padding-right: 0;">
-                                <form action="grades-report.php" method="POST" class="form-inline text-end" target="_blank">
+                            <div class="d-inline" style="padding-left: 0; padding-right: 0;">
+                                <form action="grades-report.php" method="POST" class="form-inline text-start" target="_blank">
                                 <input type="hidden" 
                                     value="<?php 
                                     if(isset($_POST['student'])) 
@@ -130,11 +131,11 @@
                                         }
                                     ?>" 
                                     name="student_name" class="text-end">
-                                <button type="submit" class="btn btn-outline-success" name="pdf">Generate PDF</button>
+                                <button type="submit" class="btn btn-outline-primary" name="pdf">Generate PDF</button>
                                 </form>
                             </div>
-                            <div class="d-inline" style="padding-right: 0;">
-                                <form action="grades-report.php" method="POST" class="form-inline text-end" target="_blank">
+                            <div class="d-inline" style="padding-left: 0; padding-right: 0;">
+                                <form action="grades-report.php" method="POST" class="form-inline text-start" target="_blank">
                                 <input type="hidden" 
                                     value="<?php 
                                     if(isset($_POST['period'])) 
@@ -144,11 +145,125 @@
                                         else {
                                         }
                                     ?>" 
-                                    name="period" class="text-end">
-                                <button type="submit" class="btn btn-outline-success" name="pdf2">Generate PDF</button>
+                                    name="period_name" class="text-end">
+                                <button type="submit" class="btn btn-outline-primary" name="pdf2">Generate PDF</button>
                                 </form>
                             </div>
                             </div>
+
+                    <div class="col-5" style="margin-top: 5px;">
+                    <form action="" method="POST" class="d-inline" >
+
+                    <!-- Selektori 1/2 = Selektimi i studentit -->
+                    <div class="d-inline">                
+                            <select class="form-select d-inline" style="width:45%; margin-bottom: 15px" aria-label="Default select example" name="student3">
+                            
+                                <?php
+                                    // create php code to display categories from database
+                                    // 1. create sql to get all active categories from database
+                                    $sql = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description, g.grade_date FROM students s 
+                                            LEFT JOIN enrollments e
+                                            ON s.student_id = e.enstudent_id
+                                            LEFT JOIN courses c
+                                            ON e.encourse_id = c.course_id
+                                            LEFT JOIN grades g
+                                            ON e.enrollment_id = g.grenrollment_id
+                                            GROUP BY CONCAT(s.first_name, s.last_name)
+                                            ";
+
+                                    // executing the query
+                                    $res = mysqli_query($cxn, $sql);
+                                    
+                                    //count rows to check whether we have categories or not
+                                    $count = mysqli_num_rows($res);
+
+                                    // if count is greater than zero, we have categories else we do not have categories
+                                    if($count>0)
+                                    {
+                                        // we have categories
+                                        while($row = mysqli_fetch_assoc($res))
+                                        {
+                                            //get the details of categories
+                                            $gr_id = $row['grade_id'];
+                                            $fname = $row['first_name'];
+                                            $lname = $row['last_name'];
+                                            $student = $fname .' '.$lname;
+                                            
+                                            ?>
+                                            <option value="<?php echo $student; ?>"><?php echo $student; ?></option>
+                                            <?php
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // we do not have categories
+                                        ?>
+                                        <option value="0">There are no students available</option>
+                                        <?php
+                                    }
+
+                                    // 2. display on dropdown
+                                ?>    
+                            </select>
+                    </div>
+                    &nbsp;&nbsp;
+                    
+                    <!-- Selektori 2/2 = Selektimi i studentit -->
+                    <div class="d-inline">
+                                    <!-- <label for="period" class="form-label" style="padding-left: 0;">Filter records by payment period: </label>
+                                    &nbsp;                    -->
+                          
+                                        <select class="form-select d-inline" style="width:45%" aria-label="Default select example" name="period3">
+                                            <option value="" default>-- Select month --</option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>     
+                                        </select>
+                    </div>
+                                       
+                                        
+                    <!-- Butoni Filter 3-->
+                            <div class="d-inline">
+                            <button type="submit" style="width:45%" class="btn btn-outline-success" name="filter3">Filter</button>
+                            </div>
+                            &nbsp;&nbsp;
+
+                </form>
+                <!-- Butoni Generate 3 -->
+                <form action="grades-report.php" method="POST" class="d-inline" target="_blank">
+                    <input type="hidden" 
+                        value="<?php 
+                            if(isset($_POST['student3'])) 
+                                {
+                                echo $_POST['student3'];
+                                }
+                                else {
+                                }
+                                ?>" 
+                        name="student_name3" class="text-end">
+                    <input type="hidden" 
+                        value="<?php 
+                            if(isset($_POST['period3'])) 
+                                {
+                                echo $_POST['period3'];
+                                }
+                                else {
+                                }
+                                ?>" 
+                        name="period_month3" class="text-end">
+                <button type="submit" style="width:45%" class="btn btn-outline-success" name="pdf3">Generate PDF</button>
+                </form>           
+
+            </div>
                             
                         </div>
 
@@ -188,7 +303,10 @@
     </tr>
   </thead>
 
-<?php
+<?php 
+
+    // the following code executes filtering data with 2 dropdown buttons
+
     if(isset($_POST['filter'])){
         //echo "filter button clicked.";
         $student_n = $_POST['student'];
@@ -231,6 +349,24 @@
         ";    
         }
         }
+        elseif(isset($_POST['filter3'])){
+            //echo "button Filter 3 clicked.";
+            $student_n3 = $_POST['student3'];
+            $period_m3 = $_POST['period3'];
+            echo "<div class='success'>Selected student: " .$student_n3. " | Selected month: " .$period_m3. " </div><br>";
+    
+            $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description, g.grade_date FROM students s 
+            LEFT JOIN enrollments e
+            ON s.student_id = e.enstudent_id
+            LEFT JOIN courses c
+            ON e.encourse_id = c.course_id
+            LEFT JOIN grades g
+            ON e.enrollment_id = g.grenrollment_id
+            WHERE CONCAT(s.first_name, ' ' , s.last_name) = '".$student_n3."' AND MONTH(g.grade_date) = '".$period_m3."'
+            -- GROUP BY s.first_name
+            ";
+            
+        }
         else{
         echo "<div class='error'>Showing all the existing students in database. You didn't select any student!</div> <br>";
 
@@ -246,6 +382,8 @@
     ";
     }
 
+    
+
     $result = mysqli_query($cxn, $query);
 
     $sn = 1;
@@ -260,7 +398,7 @@
         $gr_desc = $row['grade_description'];
         $gr_date = $row['grade_date'];
         //echo $row['attendance_id'] . " | " . $row['attenrollment_id'] . " | " . $row['attendance_date'] . " | " . $row['status'] . "<br>";
-    
+
     ?>
 
     <tr>
