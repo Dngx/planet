@@ -25,7 +25,7 @@ error_reporting(0);
 
 <!-- Filter part -->
 <div class="row mb-auto" style="margin: auto;">
-<div class="col-12 text-start" style="padding-left: 0;">
+<div class="col-12 text-start" style="padding-left: 0">
                 <!-- First filter to show data according to student name -->
                 <form action="" method="POST" class="form-inline" style="padding-left: 0;">
                   
@@ -38,13 +38,14 @@ error_reporting(0);
                                 <?php
                                     // create php code to display categories from database
                                     // 1. create sql to get all active categories from database
-                                    $sql = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, g.grade_id, g.grenrollment_id, g.grade, g.grade_description FROM students s 
+                                    $sql = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enstatus, g.grade_id, g.grenrollment_id, g.grade, g.grade_description FROM students s 
                                             LEFT JOIN enrollments e
                                             ON s.student_id = e.enstudent_id
                                             LEFT JOIN courses c
                                             ON e.encourse_id = c.course_id
                                             LEFT JOIN grades g
                                             ON e.enrollment_id = g.grenrollment_id
+                                            WHERE e.enstatus = 'Active'
                                             GROUP BY CONCAT(s.first_name, s.last_name)
                                             ";
 
@@ -118,10 +119,16 @@ error_reporting(0);
                             <button type="submit" class="btn btn-primary" name="filter2">Filter</button>
                             </div>
                             <div class="col-4 d-inline">&nbsp;
-                            <a href="r-payments.php" class="btn btn-outline-primary" name="show">Show all</a>
+                            <button type="submit" class="btn btn-outline-danger" style="width: 86px;" name="filter-x" title="Extract students who didn't make payments!">Filter</button> 
                             </div>
                 </form>
-                            </div>
+                
+</div>
+        <!-- <div class="col-4 text-end" style="padding-left: 0; border:#3f51b5; border-style:dashed; border: width 1px;">
+            <form action="" method="POST" class="form-inline" style="padding-left: 0;">
+                    form #3
+            </form>
+        </div> -->
 </div>
 <!-- Filter part end -->
 
@@ -189,34 +196,58 @@ error_reporting(0);
         echo "<div class='success'>Selected month: " .$period_m. "</div><br>";
     
         //use following code to filter data by the selected period
-        $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
+        $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enstatus, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
         LEFT JOIN enrollments e
         ON s.student_id = e.enstudent_id
         LEFT JOIN courses c
         ON e.encourse_id = c.course_id
         LEFT JOIN payments p
         ON e.enrollment_id = p.payenrollment_id
-        WHERE MONTH(p.payment_date) = '".$period_m."'
+        WHERE MONTH(p.payment_date) = '".$period_m."' AND e.enstatus = 'Active'
         -- GROUP BY p.payment_date
         ";    
         }
         }
+        elseif(isset($_POST['filter-x'])){
+            //echo "filter-x button clicked.";
+            $student_n = $_POST['student']; //not taking student name data from the form because its not included in the form.
+            //echo "Student name = " .$student_n;
+            $period_m = $_POST['period'];
+            if($period_m < 1) {
+                echo "<div class='error'>You didn't select any period!</div>";
+            }else {
+            echo "<div class='success'>Selected month: " .$period_m. "</div><br>";
+
+
+            //use following code to filter data by the selected period
+            $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enstatus, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
+            LEFT JOIN enrollments e
+            ON s.student_id = e.enstudent_id
+            LEFT JOIN courses c
+            ON e.encourse_id = c.course_id
+            LEFT JOIN payments p
+            ON e.enrollment_id = p.payenrollment_id
+            WHERE p.amount IS NULL OR MONTH(p.payment_date) != '".$period_m."' AND MONTH(p.payment_date) < '".$period_m."' AND e.enstatus = 'Active' AND CONCAT(s.first_name, ' ' , s.last_name) != '".$student_n."' -- This line of code needs to be reviewed
+            GROUP BY s.first_name ASC
+            ";    
+            } 
+        }
         else{
-        echo "<div class='error'>Showing all the existing students in database. You didn't select any filter type!</div> <br>";
+        echo "<div class='error'>Showing all the <b>ACTIVE</b> students in database. You didn't select any filter type!</div> <br>";
 
     //use following code for else case - to show all the existing data in the grades table
-    $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
+    $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enstatus, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
     LEFT JOIN enrollments e
     ON s.student_id = e.enstudent_id
     LEFT JOIN courses c
     ON e.encourse_id = c.course_id
     LEFT JOIN payments p
     ON e.enrollment_id = p.payenrollment_id
+    WHERE e.enstatus = 'Active'
     -- GROUP BY s.first_name
     ";
     }
 
-    
 
     $result = mysqli_query($cxn, $query);
 
@@ -232,6 +263,7 @@ error_reporting(0);
         $pay_date = $row['payment_date'];
         //echo $row['attendance_id'] . " | " . $row['attenrollment_id'] . " | " . $row['attendance_date'] . " | " . $row['status'] . "<br>";
     
+
     ?>
 
     <tr>
@@ -250,18 +282,22 @@ error_reporting(0);
             <a href="<?php echo SITEURL; ?>d-payment.php?payment_id=<?php echo $pay_id; ?>"><img src="img/icon-delete.png" alt="Delete Payment"></a>
             </td>
     </tr>
+    
     <?php
+        // kjo pjese eshte brenda kushtit while
 
-        
+        $shuma = $shuma + $amount;
+        $dec_shuma = number_format($shuma, 2, '.', '');
     }
     
     mysqli_close($cxn);
 ?>
 
 </table>
-
-
-    
+    <?php 
+        // kjo pjese eshte jashta kushtit while
+        echo "Total payment: " .$dec_shuma. " €";
+    ?>
 </div>
 
 
