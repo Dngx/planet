@@ -108,22 +108,40 @@ $result = mysqli_query($cxn, $query);
 $pdf = new PDF();
 $pdf->AddPage();
 
+// Fetch the first record to get the student's name
+$firstRow = mysqli_fetch_assoc($result);
+
 // Create a table for the report
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(60, 10, 'Student', 1);
+
+// Print the student's name only once
+if ($firstRow) {
+    $pdf->Cell(60, 10, 'Student: ' . $firstRow['first_name'] . ' ' . $firstRow['last_name']);
+    $pdf->Ln(15); // Move to the next row with some space after student's name
+}
+
+// Create the table headers
 $pdf->Cell(25, 10, 'Grade', 1);
 $pdf->Cell(30, 10, 'Grading Date', 1);
 $pdf->Cell(75, 10, 'Grade Description', 1);
 
 $pdf->Ln(); // Move to the next row
 
-while ($row = mysqli_fetch_assoc($result)) {
-$pdf->Cell(60, 10, $row['first_name'].' '.$row['last_name'], 1);
-$pdf->Cell(25, 10, $row['grade'], 1);
-$pdf->Cell(30, 10, $row['grade_date'], 1);
-$pdf->MultiCell(75, 10, $row['grade_description'], 1);
+// NEW CODE Print the first row of data and the rest of the records
+do {
+    $pdf->Cell(25, 10, $firstRow['grade'], 1);
+    $pdf->Cell(30, 10, $firstRow['grade_date'], 1);
+    $pdf->MultiCell(75, 10, $firstRow['grade_description'], 1);
+} while ($firstRow = mysqli_fetch_assoc($result));
 
-}
+//old code
+// while ($row = mysqli_fetch_assoc($result)) {
+// $pdf->Cell(60, 10, $row['first_name'].' '.$row['last_name'], 1);
+// $pdf->Cell(25, 10, $row['grade'], 1);
+// $pdf->Cell(30, 10, $row['grade_date'], 1);
+// $pdf->MultiCell(75, 10, $row['grade_description'], 1);
+
+// }
 
 // Close PDF and database connection
 $pdf->Output();

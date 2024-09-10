@@ -25,15 +25,15 @@ error_reporting(0);
 
 <!-- Filter part -->
 <div class="row mb-auto" style="margin: auto;">
-<div class="col-12 text-start" style="padding-left: 0;">
+<div class="col-4" style="padding-left: 0;">
                 <!-- First filter to show data according to student name -->
-                <form action="" method="POST" class="form-inline" style="padding-left: 0;">
+                <form action="" method="POST" class="form-inline" style="padding-left: 0; padding-right:0;">
                   
                     <div class="col-8 text-start d-inline" style="padding-left: 0;">
                             <!-- <label for="student" class="form-label" style="padding-left: 0;">Filter records by student name: </label>
                             &nbsp;                    -->
                             
-                            <select class="form-select w-25 d-inline" aria-label="Default select example" name="student">
+                            <select class="form-select w-50 d-inline" aria-label="Default select example" name="student">
                             
                                 <?php
                                     // create php code to display categories from database
@@ -98,7 +98,7 @@ error_reporting(0);
                             <!-- <label for="period" class="form-label" style="padding-left: 0;">Filter records by payment period: </label>
                             &nbsp;                    -->
                             
-                            <select class="form-select w-25 d-inline" aria-label="Default select example" name="period">
+                            <select class="form-select w-50 d-inline" aria-label="Default select example" name="period">
                                 <option value="" default>-- Select month --</option>
                                 <option value="1">January</option>
                                 <option value="2">February</option>
@@ -118,10 +118,222 @@ error_reporting(0);
                             <button type="submit" class="btn btn-primary" name="filter2">Filter</button>
                             </div>
                             <div class="col-4 d-inline">&nbsp;
-                            <a href="r-payments.php" class="btn btn-outline-primary" name="show">Show all</a>
+                            <button type="submit" class="btn btn-outline-danger" style="width: 86px;" name="filter-x" title="Extract students who didn't make payments!">Filter</button> 
                             </div>
                 </form>
+
+                            <!-- Filter to show Yearly data -->
+                            <form action="" method="POST" class="form-inline" style="padding-left: 0;">
+                            
+                            <div class="col-8 text-start d-inline" style="padding-left: 0;">
+                                    <!-- <label for="period" class="form-label" style="padding-left: 0;">Filter records by payment period: </label>
+                                    &nbsp;                    -->
+                          
+                                        <select class="form-select w-50 d-inline" aria-label="Default select example" name="period2">
+                                            <option value="" default>-- Select year --</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                            <option value="2029">2029</option>
+                                            <option value="2030">2030</option>
+                                        </select>
+                                        </div>
+                                        <div class="col-4 d-inline">&nbsp;
+                                        <button type="submit" class="btn btn-primary" name="filter2-1">Filter</button>
+                                        </div>
+                                        <div class="col-4 d-inline">&nbsp;
+                                        <!-- <a href="r-payments.php" class="btn btn-outline-primary" name="show2-1">Show all</a> -->
+                                        </div>
+                            </form>
+
+                            <form action="" method="POST" class="form-inline" style="padding-left: 0;">
+                  
+                    <div class="col-8 text-start d-inline">
+                            
+                            <select class="form-select w-50 d-inline" aria-label="Default select example" name="course">
+                            
+                                <?php
+                                    // create php code to display categories from database
+                                    // 1. create sql to get all active categories from database
+                                    $sql = "SELECT * FROM courses";
+
+                                    // executing the query
+                                    $res = mysqli_query($cxn, $sql);
+                                    
+                                    //count rows to check whether we have categories or not
+                                    $count = mysqli_num_rows($res);
+
+                                    // if count is greater than zero, we have categories else we do not have categories
+                                    if($count>0)
+                                    {
+                                        // we have categories
+                                        while($row = mysqli_fetch_assoc($res))
+                                        {
+                                            //get the details of categories
+                                            $course_id = $row['course_id'];
+                                            $course = $row['course_name'];
+                                            
+                                            ?>
+                                            <option value="<?php echo $course; ?>"><?php echo $course; ?></option>
+                                            <?php
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // we do not have categories
+                                        ?>
+                                        <option value="0">There are no courses available</option>
+                                        <?php
+                                    }
+
+                                    // 2. display on dropdown
+                                ?>    
+                            </select>
                             </div>
+                            <div class="col-4 d-inline">&nbsp;
+                            <button type="submit" class="btn btn-primary" name="filter-g">Filter</button>
+                            </div>
+                            </form>
+
+</div>
+
+<div class="col-2" style="padding-left:0; padding-right:0; margin-top: 5px;">
+                            <!-- ketu eshte vendi per te vendosur divin e butonit Generate PDF-->
+                            <div class="d-inline">
+                                <form action="grades-report.php" method="POST" class="form-inline text-start" target="_blank">
+                                <input type="hidden" 
+                                    value="<?php 
+                                    if(isset($_POST['student'])) 
+                                        {
+                                        echo $_POST['student']; 
+                                        }
+                                        else {
+                                        }
+                                    ?>" 
+                                    name="student_name" class="text-end">
+                                <button type="submit" class="btn btn-outline-primary" name="pdf">Generate PDF</button>
+                                </form>
+                            </div>
+                            <div class="d-inline" style="padding-left: 0; padding-right: 0;">
+                                <form action="grades-report.php" method="POST" class="form-inline text-start" target="_blank">
+                                <input type="hidden" 
+                                    value="<?php 
+                                    if(isset($_POST['period'])) 
+                                        {
+                                        echo $_POST['period']; 
+                                        }
+                                        else {
+                                        }
+                                    ?>" 
+                                    name="period_name" class="text-end">
+                                <button type="submit" class="btn btn-outline-primary" name="pdf2">Generate PDF</button>
+                                </form>
+                            </div>
+                            </div>
+
+                <div class="col-6" style="margin-top: 5px;">
+                    <form action="" method="POST" class="d-inline">
+
+                    <!-- Selektori 1/3 = Selektimi i studentit -->
+                    
+                    
+                    
+                    <!-- Selektori 2/3 = Selektimi i muajit -->
+                    <div class="d-inline">
+                                    <!-- <label for="period" class="form-label" style="padding-left: 0;">Filter records by payment period: </label>
+                                    &nbsp;                    -->
+                          
+                                        <select class="form-select d-inline" style="width:30%" aria-label="Default select example" name="period3">
+                                            <option value="" default>-- Select month --</option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>     
+                                        </select>
+                    </div>
+
+                    &nbsp;&nbsp;
+                    
+                    <!-- Selektori 3/3 = Selektimi i vitit -->
+                    <div class="d-inline">
+                                    <!-- <label for="period" class="form-label" style="padding-left: 0;">Filter records by payment period: </label>
+                                    &nbsp;                    -->
+                          
+                                        <select class="form-select d-inline" style="width:30%" aria-label="Default select example" name="period4">
+                                        <option value="" default>-- Select year --</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                            <option value="2029">2029</option>
+                                            <option value="2030">2030</option>
+                                                
+                                        </select>
+                    </div>
+                                       
+                                        <br>
+                    <!-- Butoni Filter 3-->
+                            
+                    <!-- Butoni Filter 4-->
+                            <div class="d-inline">
+                            <button type="submit" style="width:30%" class="btn btn-outline-success" name="filter4">Filter by M & Y</button>
+                            </div>
+                            &nbsp;&nbsp;
+
+                </form>
+                <!-- Butoni Generate 3 -->
+                <form action="payments-report.php" method="POST" class="d-inline" target="_blank">
+                    <input type="hidden" 
+                        value="<?php 
+                            if(isset($_POST['student3'])) 
+                                {
+                                echo $_POST['student3'];
+                                }
+                                else {
+                                    echo $_POST['student3'];
+                                }
+                                ?>" 
+                        name="student_name3" class="text-end">
+                    <input type="hidden" 
+                        value="<?php 
+                            if(isset($_POST['period3'])) 
+                                {
+                                echo $_POST['period3'];
+                                }
+                                else {
+                                    echo $_POST['period3'];
+                                }
+                                ?>" 
+                        name="period_month3" class="text-end">
+                        <input type="hidden" 
+                        value="<?php 
+                            if(isset($_POST['period4'])) 
+                                {
+                                echo $_POST['period4'];
+                                }
+                                else {
+                                    echo $_POST['period4'];
+                                }
+                                ?>" 
+                        name="period_year4" class="text-end">
+                <button type="submit" style="width:30%" class="btn btn-outline-success" name="pdf3">Generate PDF</button>
+                </form>           
+
+            </div>
+
 </div>
 <!-- Filter part end -->
 
@@ -201,6 +413,81 @@ error_reporting(0);
         ";    
         }
         }
+        elseif(isset($_POST['filter-x'])){
+            //echo "filter-x button clicked.";
+          
+            //use following code to filter data by the selected period
+            $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
+            LEFT JOIN enrollments e
+            ON s.student_id = e.enstudent_id
+            LEFT JOIN courses c
+            ON e.encourse_id = c.course_id
+            LEFT JOIN payments p
+            ON e.enrollment_id = p.payenrollment_id
+            WHERE p.amount IS NULL
+            -- GROUP BY p.payment_date
+            ";    
+            }
+            elseif(isset($_POST['filter-g'])){
+                //echo "filter-group button clicked.";
+                $course_n = $_POST['course'];
+                echo "<div class='success'>Selected course name: " .$course_n. "</div><br>";
+          
+                //use following code to filter data by the selected period
+                $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, p.payment_id, p.payenrollment_id  FROM students s 
+                    LEFT JOIN enrollments e
+                    ON s.student_id = e.enstudent_id
+                    LEFT JOIN courses c
+                    ON e.encourse_id = c.course_id
+                    LEFT JOIN payments p
+                    ON e.enrollment_id = p.payenrollment_id
+                    WHERE c.course_name = '".$course_n."'
+                    GROUP BY CONCAT(s.first_name, s.last_name)
+                ";    
+                }
+
+        // third conditional to filter data by period/year
+        elseif(isset($_POST['filter2-1'])){
+            //echo "filter2-1 button clicked.";
+
+            $period_y = $_POST['period2'];
+                if($period_y < 1) {
+                    echo "<div class='error'>You didn't select any period!</div>";
+                }else {
+
+            echo "<div class='success'>Selected year: " .$period_y. "</div><br>";
+        
+            //use following code to filter data by the selected period
+            $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
+            LEFT JOIN enrollments e
+            ON s.student_id = e.enstudent_id
+            LEFT JOIN courses c
+            ON e.encourse_id = c.course_id
+            LEFT JOIN payments p
+            ON e.enrollment_id = p.payenrollment_id
+            WHERE YEAR(p.payment_date) = '".$period_y."'
+            -- GROUP BY p.payment_date
+            ";    
+            }
+            }
+            elseif(isset($_POST['filter4'])){
+                //echo "button Filter 4 clicked. Filter with Month AND Year.";
+                $period_m3 = $_POST['period3'];
+                $period_y4 = $_POST['period4'];
+                echo "<div class='success'>Selected month: " .$period_m3. " | Selected year: " .$period_y4. "</div><br>";
+        
+                $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
+                LEFT JOIN enrollments e
+                ON s.student_id = e.enstudent_id
+                LEFT JOIN courses c
+                ON e.encourse_id = c.course_id
+                LEFT JOIN payments p
+                ON e.enrollment_id = p.payenrollment_id
+                WHERE MONTH(p.payment_date) = '".$period_m3."' AND YEAR(p.payment_date) = '".$period_y4."'
+                -- GROUP BY s.first_name
+                ";
+                }  
+
         else{
         echo "<div class='error'>Showing all the existing students in database. You didn't select any filter type!</div> <br>";
 
@@ -251,7 +538,10 @@ error_reporting(0);
             </td>
     </tr>
     <?php
+        // kjo pjese eshte brenda kushtit while
 
+        $shuma = $shuma + $amount;
+        $dec_shuma = number_format($shuma, 2, '.', '');
         
     }
     
@@ -259,7 +549,10 @@ error_reporting(0);
 ?>
 
 </table>
-
+    <?php 
+        // kjo pjese eshte jashta kushtit while
+        echo "Total payment: " .$dec_shuma. " €";
+    ?>
 
     
 </div>

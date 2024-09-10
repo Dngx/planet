@@ -91,7 +91,8 @@
                             </select>
                             </div>
                             <div class="col-4 d-inline">&nbsp;
-                            <button type="submit" class="btn btn-primary" name="filter">Filter</button>
+                            <button type="submit" class="btn btn-primary" name="filter">Filter</button> &nbsp;
+                            <a href="m-grades.php" class="btn btn-outline-primary" name="show">Show all</a>
                             </div>
                             </form>
                         </div>
@@ -334,7 +335,16 @@
 
         if (mysqli_query($cxn, $query)) {
           $_SESSION['add'] = "<div class='success'>Grading marked successfully!</div>";  
-          //echo "<br>Grading marked successfully!";
+          echo "<br>Grading marked successfully!";
+
+          // added data to database and return to lastly filtered group - show only students of lately selected group
+          
+          
+
+                
+
+
+
         } else {
           $_SESSION['error'] = "<div class='error'>Error marking grades: </div>" . mysqli_error($cxn);  
           //echo "<br><br>Error marking grades: " . mysqli_error($cxn);
