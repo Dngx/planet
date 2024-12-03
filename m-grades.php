@@ -46,55 +46,36 @@
                 <div class="row mb-auto" style="margin: auto;">
                   <form action="" method="POST" class="form-inline" style="padding-left: 0;">
                   
-                    <div class="col-8 text-start d-inline">
-                            <label for="course" class="form-label">Filter records by course name: </label>
-                            &nbsp;                   
-                            
-                            <select class="form-select w-25 d-inline" aria-label="Default select example" name="course">
-                            
-                                <?php
-                                    // create php code to display categories from database
-                                    // 1. create sql to get all active categories from database
-                                    $sql = "SELECT * FROM courses";
-
-                                    // executing the query
-                                    $res = mysqli_query($cxn, $sql);
-                                    
-                                    //count rows to check whether we have categories or not
-                                    $count = mysqli_num_rows($res);
-
-                                    // if count is greater than zero, we have categories else we do not have categories
-                                    if($count>0)
-                                    {
-                                        // we have categories
-                                        while($row = mysqli_fetch_assoc($res))
-                                        {
-                                            //get the details of categories
-                                            $course_id = $row['course_id'];
-                                            $course = $row['course_name'];
-                                            
-                                            ?>
-                                            <option value="<?php echo $course; ?>"><?php echo $course; ?></option>
+                  <div class="d-flex align-items-center justify-content-between">
+                                    <div class="text-start">
+                                        <label for="course" class="form-label">Filter records by course name:</label>
+                                        <select class="form-select w-auto d-inline" aria-label="Default select example" name="course">
                                             <?php
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // we do not have categories
-                                        ?>
-                                        <option value="0">There are no courses available</option>
-                                        <?php
-                                    }
+                                                $sql = "SELECT * FROM courses";
+                                                $res = mysqli_query($cxn, $sql);
+                                                $count = mysqli_num_rows($res);
+                                                if ($count > 0) {
+                                                    while ($row = mysqli_fetch_assoc($res)) {
+                                                        $course = $row['course_name'];
+                                                        echo "<option value='$course'>$course</option>";
+                                                    }
+                                                } else {
+                                                    echo "<option value='0'>There are no courses available</option>";
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary" name="filter">Filter</button>
+                                        <a href="m-grades.php" class="btn btn-outline-primary" name="show">Show all</a>
+                                    </div>
+                                    <div>
+                                        <input type="date" id="grading_date" name="grading_date" class="form-control w-auto d-inline">
+                                        <!-- <button type="submit" class="btn btn-success" name="submit">Submit Grades</button> -->
+                                    </div>
+                                </div>
 
-                                    // 2. display on dropdown
-                                ?>    
-                            </select>
-                            </div>
-                            <div class="col-4 d-inline">&nbsp;
-                            <button type="submit" class="btn btn-primary" name="filter">Filter</button> &nbsp;
-                            <a href="m-grades.php" class="btn btn-outline-primary" name="show">Show all</a>
-                            </div>
-                            </form>
+                            <!-- </form> Po e fshehim kete pjese te formes, po i bashkojme dy format ne nje form -->
                         </div>
                 
 
@@ -157,7 +138,7 @@
       <th scope="col">Student</th>
       <th scope="col">Grade</th>
       <th scope="col">Description</th>
-      <th scope="col">Grading date</th>
+      <!-- <th scope="col">Grading date</th> -->
     </tr>
   </thead>
 
@@ -242,7 +223,7 @@
             <td class="w-25">
             
             <!-- Getting input values from form -->
-            <form action="" method="POST" enctype="multipart/form-data">
+            <!-- <form action="" method="POST" enctype="multipart/form-data"> Po e fshehim kete pjese te formes, po i bashkojme dy format ne nje form -->
               <?php echo $firstname.' '.$lastname;?>
               <input type="hidden" name="grenrollment_id[]" value="<?php echo $enrollment_id; ?>">
             </td>
@@ -252,9 +233,9 @@
             <td class="w-25">
             <textarea name="grade_description[]" id="" cols="70" rows="1" class="form-control"></textarea>
             </td>
-            <td class="w-25">
+            <!-- <td class="w-25">
             <input type="date" name="grade_date[]" class="form-control"></input>
-            </td>
+            </td> -->
             
             
           </tr>
@@ -274,8 +255,8 @@
 </table>
 </div>
 
-
-  <input type="submit" name="submit" value="Submit" class="btn btn-success justify-content-center"></input>
+<button type="submit" class="btn btn-success" name="submit">Submit Grades</button>
+  <!-- <input type="submit" name="submit" value="Submit" class="btn btn-success justify-content-center"></input> -->
 </form>
 
 <?php 
@@ -315,17 +296,17 @@
     $grenrollment_ids = $_POST['grenrollment_id'];
     $grades = $_POST['grade'];
     $grade_descriptions = $_POST['grade_description'];
-    $grade_dates = $_POST['grade_date'];
+    $grading_date = $_POST['grading_date'];
     
     // test code from AI
     for ($i = 0; $i < count($grenrollment_ids); $i++) {
       // Check if student ID and attendance date are not empty
-      if(!empty($grenrollment_ids[$i]) && !empty($grades[$i]) && !empty($grade_descriptions[$i]) && !empty($grade_dates[$i])){
+      if(!empty($grenrollment_ids[$i]) && !empty($grades[$i]) && !empty($grade_descriptions[$i]) && !empty($grading_date)){
         $data = array(
             'grenrollment_id' => $grenrollment_ids[$i],
             'grade' => $grades[$i],
             'grade_description' => $grade_descriptions[$i],
-            'grade_date' => $grade_dates[$i]
+            'grade_date' => $grading_date // using the single grading date
         );
         
         $columns = implode(', ', array_keys($data));
