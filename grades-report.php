@@ -70,6 +70,7 @@ elseif(isset($_POST['pdf2'])){
     elseif (isset($_POST['pdf3'])) {
         $student_n3 = $_POST['student_name3'];
         $period_m3 = $_POST['period_month3'];
+        $period_y4 = $_POST['period4'];
 
         //echo "Student: " .$student_n3. "<br>";
         //echo "Period: " .$period_m3. "<br>";
@@ -81,7 +82,7 @@ elseif(isset($_POST['pdf2'])){
             ON e.encourse_id = c.course_id
             LEFT JOIN grades g
             ON e.enrollment_id = g.grenrollment_id
-            WHERE CONCAT(s.first_name, ' ' , s.last_name) = '".$student_n3."' AND MONTH(g.grade_date) = '".$period_m3."'
+            WHERE CONCAT(s.first_name, ' ' , s.last_name) = '".$student_n3."' AND MONTH(g.grade_date) = '".$period_m3."' AND YEAR(g.grade_date) = '".$period_y4."'
             -- GROUP BY s.first_name
             ";
     }

@@ -322,6 +322,16 @@ error_reporting(0);
                                 }
                                 ?>" 
                         name="period_month3" class="text-end">
+                        <input type="hidden" 
+                        value="<?php 
+                            if(isset($_POST['period4'])) 
+                                {
+                                echo $_POST['period4'];
+                                }
+                                else {
+                                }
+                                ?>" 
+                        name="period4" class="text-end">
                 <button type="submit" style="width:30%" class="btn btn-outline-success" name="pdf3">Generate PDF</button>
                 </form>           
 

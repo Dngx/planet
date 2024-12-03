@@ -1,0 +1,3 @@
+SQL code for joining three tables: students, course, enrollments with unique data
+
+SELECT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstudent_id, e.encourse_id FROM students s LEFT JOIN enrollments e ON s.student_id = e.enstudent_id LEFT JOIN courses c ON e.encourse_id = c.course_id WHERE e.enrollment_id=enrollment_id
