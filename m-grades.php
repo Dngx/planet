@@ -46,7 +46,7 @@
                 <div class="row mb-auto" style="margin: auto;">
                   <form action="" method="POST" class="form-inline" style="padding-left: 0;">
                   
-                  <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center justify-content-between">
                                     <div class="text-start">
                                         <label for="course" class="form-label">Filter records by course name:</label>
                                         <select class="form-select w-auto d-inline" aria-label="Default select example" name="course">
@@ -72,6 +72,10 @@
                                     <div>
                                         <input type="date" id="grading_date" name="grading_date" class="form-control w-auto d-inline">
                                         <!-- <button type="submit" class="btn btn-success" name="submit">Submit Grades</button> -->
+                                    </div>
+                                    <div>
+                                        <input type="text" id="grade_description" name="grade_description" class="form-control w-auto d-inline" placeholder="input grade descrtiption ..">
+                                        
                                     </div>
                                 </div>
 
@@ -137,7 +141,7 @@
       <th scope="col">#</th>
       <th scope="col">Student</th>
       <th scope="col">Grade</th>
-      <th scope="col">Description</th>
+      <!-- <th scope="col">Description</th> -->
       <!-- <th scope="col">Grading date</th> -->
     </tr>
   </thead>
@@ -161,26 +165,27 @@
       echo "<div class='success'>Selected course name: " .$course_n. "</div><br>";
 
       $sql = "
-          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, g.grade_id, g.grenrollment_id  FROM students s 
+          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstatus, g.grade_id, g.grenrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
           ON e.encourse_id = c.course_id
           LEFT JOIN grades g
           ON e.enrollment_id = g.grenrollment_id
-          WHERE c.course_name = '".$course_n."'
+          WHERE c.course_name = '".$course_n."' AND e.enstatus = 'Active'
           GROUP BY CONCAT(s.first_name, s.last_name)
     ";
     } else{
       echo "<div class='error'>You didn't select any course group!</div> <br>";
     $sql = "
-          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, g.grade_id, g.grenrollment_id  FROM students s 
+          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstatus, g.grade_id, g.grenrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
           ON e.encourse_id = c.course_id
           LEFT JOIN grades g
           ON e.enrollment_id = g.grenrollment_id
+          WHERE e.enstatus = 'Active'
           GROUP BY CONCAT(s.first_name, s.last_name)
     ";
   }
@@ -228,11 +233,11 @@
               <input type="hidden" name="grenrollment_id[]" value="<?php echo $enrollment_id; ?>">
             </td>
             <td>
-              <input type="number" step=".01" class="form-control" name="grade[]" value="">
+              <input type="number" step=".01" class="form-control w-25" name="grade[]" value="">
             </td>
-            <td class="w-25">
+            <!-- <td class="w-25">
             <textarea name="grade_description[]" id="" cols="70" rows="1" class="form-control"></textarea>
-            </td>
+            </td> -->
             <!-- <td class="w-25">
             <input type="date" name="grade_date[]" class="form-control"></input>
             </td> -->
@@ -295,17 +300,17 @@
       
     $grenrollment_ids = $_POST['grenrollment_id'];
     $grades = $_POST['grade'];
-    $grade_descriptions = $_POST['grade_description'];
+    $grade_description = $_POST['grade_description'];
     $grading_date = $_POST['grading_date'];
     
     // test code from AI
     for ($i = 0; $i < count($grenrollment_ids); $i++) {
       // Check if student ID and attendance date are not empty
-      if(!empty($grenrollment_ids[$i]) && !empty($grades[$i]) && !empty($grade_descriptions[$i]) && !empty($grading_date)){
+      if(!empty($grenrollment_ids[$i]) && !empty($grades[$i]) && !empty($grade_description) && !empty($grading_date)){
         $data = array(
             'grenrollment_id' => $grenrollment_ids[$i],
             'grade' => $grades[$i],
-            'grade_description' => $grade_descriptions[$i],
+            'grade_description' => $grade_description, // using the single description, for multiple description use $grade_descriptions[$i]
             'grade_date' => $grading_date // using the single grading date
         );
         

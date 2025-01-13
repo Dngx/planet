@@ -118,7 +118,7 @@ error_reporting(0);
                             <button type="submit" class="btn btn-primary" name="filter2">Filter</button>
                             </div>
                             <div class="col-4 d-inline">&nbsp;
-                            <button type="submit" class="btn btn-outline-danger" style="width: 86px;" name="filter-x" title="Extract students who didn't make payments!">Filter</button> 
+                            
                             </div>
                 </form>
 
@@ -235,10 +235,7 @@ error_reporting(0);
                             </div>
 
                 <div class="col-6" style="margin-top: 5px;">
-                    <form action="" method="POST" class="d-inline">
-
-                    <!-- Selektori 1/3 = Selektimi i studentit -->
-                    
+                    <form action="" method="POST" class="d-inline">             
                     
                     
                     <!-- Selektori 2/3 = Selektimi i muajit -->
@@ -292,9 +289,9 @@ error_reporting(0);
                             <button type="submit" style="width:30%" class="btn btn-outline-success" name="filter4">Filter by M & Y</button>
                             </div>
                             &nbsp;&nbsp;
-
+                            <button type="submit" class="btn btn-outline-danger" style="width:30%;" name="filter-x" title="Extract students who didn't make payments!">Filter</button>
                 </form>
-                <!-- Butoni Generate 3 -->
+                <!-- Butoni Generate 3 --><br>
                 <form action="payments-report.php" method="POST" class="d-inline" target="_blank">
                     <input type="hidden" 
                         value="<?php 
@@ -329,9 +326,10 @@ error_reporting(0);
                                 }
                                 ?>" 
                         name="period_year4" class="text-end">
-                <button type="submit" style="width:30%" class="btn btn-outline-success" name="pdf3">Generate PDF</button>
-                </form>           
-
+                <button type="submit" style="width:30%;" class="btn btn-outline-success" name="pdf3">Generate PDF</button>
+                
+                </form>
+                 
             </div>
 
 </div>
@@ -414,18 +412,27 @@ error_reporting(0);
         }
         }
         elseif(isset($_POST['filter-x'])){
-            //echo "filter-x button clicked.";
+            // button clicked. Filter with Month AND Year.";
+            $period_month3 = $_POST['period3']; // needs to be reviewed
+            $period_year4 = $_POST['period4']; // needs to be reviewed
+            echo "<div class='success'>Showing students who didn't make payment for the period " .$period_month3. " / " .$period_year4. "</div><br>";
           
             //use following code to filter data by the selected period
-            $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
+            $query = "SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enstatus, p.payment_id, p.payenrollment_id, p.amount, p.payment_date FROM students s 
             LEFT JOIN enrollments e
             ON s.student_id = e.enstudent_id
             LEFT JOIN courses c
             ON e.encourse_id = c.course_id
             LEFT JOIN payments p
             ON e.enrollment_id = p.payenrollment_id
-            WHERE p.amount IS NULL
-            -- GROUP BY p.payment_date
+            WHERE NOT EXISTS (
+                SELECT 1 
+                FROM payments p 
+                WHERE p.payenrollment_id = e.enrollment_id
+                AND MONTH(p.payment_date) = ".$period_month3." 
+                AND YEAR(p.payment_date) = ".$period_year4."
+            ) AND e.enstatus = 'Active'
+            GROUP BY s.first_name, s.last_name
             ";    
             }
             elseif(isset($_POST['filter-g'])){
@@ -545,13 +552,25 @@ error_reporting(0);
         
     }
     
+    
     mysqli_close($cxn);
 ?>
 
 </table>
     <?php 
+        
+        //kjo pjese te ekzekutohet nese klikohet butoni Filter i kuq.
+        if(isset($_POST['filter-x'])){
+            $papaguar = 0;
+            $sn=$sn-1;
+            echo "<br><div class='error'>" .$sn. " students x 20€ = <b>" .$papaguar = $sn*20 ."€</b> total unpaid price.</div>";
+        }
+        else {
         // kjo pjese eshte jashta kushtit while
+        // kjo pjese ekzekutohet jashta te gjitha rasteve nese nuk plotesohet kushti i butonit te kuq Filter
         echo "Total payment: " .$dec_shuma. " €";
+        }
+        
     ?>
 
     

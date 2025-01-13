@@ -24,7 +24,7 @@
 
                         // 2. create SQL query to get the details
                         $sql = "
-                        SELECT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstudent_id, e.encourse_id  FROM students s 
+                        SELECT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstudent_id, e.encourse_id, e.enstatus  FROM students s 
                         LEFT JOIN enrollments e
                         ON s.student_id = e.enstudent_id
                         LEFT JOIN courses c
@@ -53,7 +53,8 @@
                                 $lname = $row['last_name'];
                                 $cname = $row['course_name'];
                                 $encourse_id = $row['encourse_id']; 
-                                $endate = $row['enrollment_date']; 
+                                $endate = $row['enrollment_date'];
+                                $enstatus = $row['enstatus'];  
                                 
                                 //echo $enrollment_id. ' '.$enstudent_id.' '.$encourse_id.' '.$endate;
                             }
@@ -175,6 +176,19 @@
                             <label for="endate" class="form-label">Enrollment date:</label>
                             <input type="date" class="form-control" name="endate2" value="<?php echo $endate;?>">
                         </div>
+                        <div class="mb-2">
+                            <label for="enstatus" class="form-label">Enrollment status:
+                                <?php 
+                                if(!isset($enstatus))
+                                    {echo isset($enstatus);} 
+                                        else {echo $enstatus;} 
+                                ?>
+                            </label>
+                            <select class="form-select" aria-label="Default select example" name="enstatus2">
+                                <option selected value="Active">Active</option>
+                                <option value="Pasive">Pasive</option>
+                            </select>
+                        </div>
                         <br>
                         <input type="hidden" name="enrollment_id2" value="<?php echo $enrollment_id; ?>">
                         <input type="submit" name="submit" value="Update" class="btn btn-primary">
@@ -195,12 +209,14 @@
         $st_id = $_POST['enstudent_id2'];
         $co_id = $_POST['encourse_id2'];
         $endt = $_POST['endate2'];
+        $enst = $_POST['enstatus2'];
 
         // create a SQL query to update admin
         $sql = "UPDATE enrollments SET
         enstudent_id = '$st_id',
         encourse_id = '$co_id',
-        enrollment_date = '$endt'
+        enrollment_date = '$endt',
+        enstatus = '$enst'
 
         WHERE enrollment_id = '$enrollment_id'
         ";

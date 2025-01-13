@@ -97,6 +97,7 @@
       <th scope="col">Student</th>
       <th scope="col">Course</th>
       <th scope="col">Enrollment date</th>
+      <th scope="col">Enrollment status</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -116,7 +117,7 @@
     // Above SQL query code has to be reviewed!
 
     $sql = "
-          SELECT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id  FROM students s 
+          SELECT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enstatus, e.enrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
@@ -148,6 +149,7 @@
           $lastname = $rows['last_name'];
           $cname = $rows['course_name'];
           $endate = $rows['enrollment_date'];
+          $enstatus = $rows['enstatus'];
 
           // display the values in our table
           ?>
@@ -163,6 +165,15 @@
               ?>
             </td>
             <td><?php echo $endate;?></td>
+            <td>
+              <?php 
+              if($enstatus == "Active"){
+              echo $enstatus;}
+              else{
+                echo "<div class='error'>$enstatus</div>";
+              }
+              ?>
+            </td>
             <td>
               <!-- Use this line if needed for data update: <a href="<?php //echo SITEURL; ?>admin/perditeso-psw.php?course$course_id=<?php //echo $course_id; ?>"><img src="../img/icon-chpsw.png" alt="Perditeso fjalekalimin"></a> -->
               <a href="<?php echo SITEURL; ?>u-enrollment.php?enrollment_id=<?php echo $enrollment_id; ?>"><img src="img/icon-update.png" alt="Update enrollment info"></a>

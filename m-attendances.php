@@ -185,26 +185,27 @@ include('partials/menu.php');
       echo "<div class='success'>Selected course name: " .$course_n. "</div><br>";
 
       $sql = "
-          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, a.attendance_id, a.attenrollment_id  FROM students s 
+          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstatus, a.attendance_id, a.attenrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
           ON e.encourse_id = c.course_id
           LEFT JOIN attendances a
           ON e.enrollment_id = a.attenrollment_id
-          WHERE c.course_name = '".$course_n."'
+          WHERE c.course_name = '".$course_n."' AND e.enstatus = 'Active'
           GROUP BY CONCAT(s.first_name, s.last_name)
     ";
     } else{
-      echo "<div class='error'>You didn't select any course group!</div> <br>";
+      echo "<div class='error'>You didn't select any course group! Showing all students data.</div> <br>";
     $sql = "
-          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, a.attendance_id, a.attenrollment_id  FROM students s 
+          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstatus, a.attendance_id, a.attenrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
           ON e.encourse_id = c.course_id
           LEFT JOIN attendances a
           ON e.enrollment_id = a.attenrollment_id
+          WHERE e.enstatus = 'Active'
           GROUP BY CONCAT(s.first_name, s.last_name)
     ";
   }

@@ -168,26 +168,27 @@
       echo "<div class='success'>Selected course name: " .$course_n. "</div><br>";
 
       $sql = "
-          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, p.payment_id, p.payenrollment_id  FROM students s 
+          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstatus, p.payment_id, p.payenrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
           ON e.encourse_id = c.course_id
           LEFT JOIN payments p
           ON e.enrollment_id = p.payenrollment_id
-          WHERE c.course_name = '".$course_n."'
+          WHERE c.course_name = '".$course_n."' AND e.enstatus = 'Active'
           GROUP BY CONCAT(s.first_name, s.last_name)
     ";
     } else{
       echo "<div class='error'>You didn't select any course group!</div> <br>";
     $sql = "
-          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, p.payment_id, p.payenrollment_id  FROM students s 
+          SELECT DISTINCT s.first_name, s.last_name, c.course_name, e.enrollment_date, e.enrollment_id, e.enstatus, p.payment_id, p.payenrollment_id  FROM students s 
           LEFT JOIN enrollments e
           ON s.student_id = e.enstudent_id
           LEFT JOIN courses c
           ON e.encourse_id = c.course_id
           LEFT JOIN payments p
           ON e.enrollment_id = p.payenrollment_id
+          WHERE e.enstatus = 'Active'
           GROUP BY CONCAT(s.first_name, s.last_name)
     ";
   }
@@ -238,7 +239,10 @@
               <input type="number" step=".01" class="form-control" name="amount[]" value="">
             </td>
             <td class="w-25">
-            <input type="date" name="payment_date[]" class="form-control"></input>
+            <input type="date" name="payment_date[]" class="form-control" value="<?php 
+                                $d = date('Y-m-d');
+                                echo $d;
+                                ?>"></input>
             </td>
             
             

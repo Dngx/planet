@@ -112,7 +112,17 @@
                         </div>
                         <div class="mb-2">
                             <label for="enrollment" class="form-label">Enrollment date:</label>
-                            <input type="date" class="form-control" name="enrollment" placeholder="Enter enrollment date...">
+                            <input type="date" class="form-control" name="enrollment" placeholder="Enter enrollment date..." value="<?php 
+                                $d = date('Y-m-d');
+                                echo $d;
+                                ?>">
+                        </div>
+                        <div class="mb-2">
+                            <label for="en_status" class="form-label">Enrollment status:</label>
+                            <select name="en_status" id="" class="form-control">
+                                <option selected value="Active">Active</option>
+                                <option value="Pasive">Pasive</option>
+                            </select>
                         </div>
                         <br>
                         <input type="submit" name="submit" value="Enroll" class="btn btn-primary">
